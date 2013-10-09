@@ -81,6 +81,10 @@ namespace ECTunes {
             this.chk_tsmTools_CalibrateSignal = new System.Windows.Forms.ToolStripMenuItem();
             this.cbbComPort = new System.Windows.Forms.ComboBox();
             this.btnRefreshComPort = new System.Windows.Forms.Button();
+            this.tbxGyroThreshold = new System.Windows.Forms.TextBox();
+            this.tbxAccelerationThreshold = new System.Windows.Forms.TextBox();
+            this.lblGyroThreshold = new System.Windows.Forms.Label();
+            this.lblAccelerationThreshold = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.pnlChart.SuspendLayout();
             this.gbGy.SuspendLayout();
@@ -119,7 +123,7 @@ namespace ECTunes {
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(937, 46);
+            this.btnExit.Location = new System.Drawing.Point(1165, 46);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 2;
@@ -208,7 +212,7 @@ namespace ECTunes {
             this.tbxGyQAngle.Name = "tbxGyQAngle";
             this.tbxGyQAngle.Size = new System.Drawing.Size(100, 20);
             this.tbxGyQAngle.TabIndex = 1;
-            this.tbxGyQAngle.Text = "0.001";
+            this.tbxGyQAngle.Text = "0.1";
             // 
             // lblGyQAngle
             // 
@@ -274,7 +278,7 @@ namespace ECTunes {
             this.tbxAccQAngle.Name = "tbxAccQAngle";
             this.tbxAccQAngle.Size = new System.Drawing.Size(100, 20);
             this.tbxAccQAngle.TabIndex = 1;
-            this.tbxAccQAngle.Text = "0.001";
+            this.tbxAccQAngle.Text = "0.1";
             // 
             // lblAccQAngle
             // 
@@ -341,7 +345,7 @@ namespace ECTunes {
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(1102, 252);
+            this.btnSelectAll.Location = new System.Drawing.Point(978, 38);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(34, 23);
             this.btnSelectAll.TabIndex = 16;
@@ -453,7 +457,7 @@ namespace ECTunes {
             // 
             // btnDataChart
             // 
-            this.btnDataChart.Location = new System.Drawing.Point(816, 46);
+            this.btnDataChart.Location = new System.Drawing.Point(559, 46);
             this.btnDataChart.Name = "btnDataChart";
             this.btnDataChart.Size = new System.Drawing.Size(75, 23);
             this.btnDataChart.TabIndex = 4;
@@ -601,14 +605,14 @@ namespace ECTunes {
             // cbbComPort
             // 
             this.cbbComPort.FormattingEnabled = true;
-            this.cbbComPort.Location = new System.Drawing.Point(495, 46);
+            this.cbbComPort.Location = new System.Drawing.Point(338, 46);
             this.cbbComPort.Name = "cbbComPort";
             this.cbbComPort.Size = new System.Drawing.Size(121, 21);
             this.cbbComPort.TabIndex = 15;
             // 
             // btnRefreshComPort
             // 
-            this.btnRefreshComPort.Location = new System.Drawing.Point(623, 46);
+            this.btnRefreshComPort.Location = new System.Drawing.Point(466, 46);
             this.btnRefreshComPort.Name = "btnRefreshComPort";
             this.btnRefreshComPort.Size = new System.Drawing.Size(75, 23);
             this.btnRefreshComPort.TabIndex = 16;
@@ -616,11 +620,49 @@ namespace ECTunes {
             this.btnRefreshComPort.UseVisualStyleBackColor = true;
             this.btnRefreshComPort.Click += new System.EventHandler(this.btnRefreshComPort_Click);
             // 
+            // tbxGyroThreshold
+            // 
+            this.tbxGyroThreshold.Location = new System.Drawing.Point(749, 48);
+            this.tbxGyroThreshold.Name = "tbxGyroThreshold";
+            this.tbxGyroThreshold.Size = new System.Drawing.Size(100, 20);
+            this.tbxGyroThreshold.TabIndex = 17;
+            this.tbxGyroThreshold.Text = "10000";
+            // 
+            // tbxAccelerationThreshold
+            // 
+            this.tbxAccelerationThreshold.Location = new System.Drawing.Point(989, 49);
+            this.tbxAccelerationThreshold.Name = "tbxAccelerationThreshold";
+            this.tbxAccelerationThreshold.Size = new System.Drawing.Size(100, 20);
+            this.tbxAccelerationThreshold.TabIndex = 18;
+            this.tbxAccelerationThreshold.Text = "10000";
+            // 
+            // lblGyroThreshold
+            // 
+            this.lblGyroThreshold.AutoSize = true;
+            this.lblGyroThreshold.Location = new System.Drawing.Point(664, 51);
+            this.lblGyroThreshold.Name = "lblGyroThreshold";
+            this.lblGyroThreshold.Size = new System.Drawing.Size(79, 13);
+            this.lblGyroThreshold.TabIndex = 19;
+            this.lblGyroThreshold.Text = "Gyro Threshold";
+            // 
+            // lblAccelerationThreshold
+            // 
+            this.lblAccelerationThreshold.AutoSize = true;
+            this.lblAccelerationThreshold.Location = new System.Drawing.Point(867, 52);
+            this.lblAccelerationThreshold.Name = "lblAccelerationThreshold";
+            this.lblAccelerationThreshold.Size = new System.Drawing.Size(116, 13);
+            this.lblAccelerationThreshold.TabIndex = 20;
+            this.lblAccelerationThreshold.Text = "Acceleration Threshold";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 629);
+            this.Controls.Add(this.lblAccelerationThreshold);
+            this.Controls.Add(this.lblGyroThreshold);
+            this.Controls.Add(this.tbxAccelerationThreshold);
+            this.Controls.Add(this.tbxGyroThreshold);
             this.Controls.Add(this.btnRefreshComPort);
             this.Controls.Add(this.cbbComPort);
             this.Controls.Add(this.btnCalibrate);
@@ -712,6 +754,10 @@ namespace ECTunes {
         private Label lblAccQBias;
         private TextBox tbxAccQAngle;
         private Label lblAccQAngle;
+        private TextBox tbxGyroThreshold;
+        private TextBox tbxAccelerationThreshold;
+        private Label lblGyroThreshold;
+        private Label lblAccelerationThreshold;
     }
 }
 
