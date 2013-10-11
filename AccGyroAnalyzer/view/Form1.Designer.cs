@@ -32,6 +32,7 @@ namespace ECTunes {
             this.btnReset = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.pnlChart = new System.Windows.Forms.Panel();
+            this.chkGyroFwdCalibrated = new System.Windows.Forms.CheckBox();
             this.gbGy = new System.Windows.Forms.GroupBox();
             this.tbxGyRMeasure = new System.Windows.Forms.TextBox();
             this.lblGyRMeasure = new System.Windows.Forms.Label();
@@ -39,6 +40,7 @@ namespace ECTunes {
             this.lblGyQBias = new System.Windows.Forms.Label();
             this.tbxGyQAngle = new System.Windows.Forms.TextBox();
             this.lblGyQAngle = new System.Windows.Forms.Label();
+            this.chkAccFwdCalibrated = new System.Windows.Forms.CheckBox();
             this.gbAcc = new System.Windows.Forms.GroupBox();
             this.tbxAccRMeasure = new System.Windows.Forms.TextBox();
             this.lblAccRMeasure = new System.Windows.Forms.Label();
@@ -46,6 +48,7 @@ namespace ECTunes {
             this.lblAccQBias = new System.Windows.Forms.Label();
             this.tbxAccQAngle = new System.Windows.Forms.TextBox();
             this.lblAccQAngle = new System.Windows.Forms.Label();
+            this.chkZeroCalibrated = new System.Windows.Forms.CheckBox();
             this.lblForceRt = new System.Windows.Forms.Label();
             this.chkForceRt = new System.Windows.Forms.CheckBox();
             this.lblForceRg = new System.Windows.Forms.Label();
@@ -116,7 +119,7 @@ namespace ECTunes {
             this.btnReset.Location = new System.Drawing.Point(149, 46);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
-            this.btnReset.TabIndex = 1;
+            this.btnReset.TabIndex = 2;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
@@ -133,8 +136,11 @@ namespace ECTunes {
             // 
             // pnlChart
             // 
+            this.pnlChart.Controls.Add(this.chkGyroFwdCalibrated);
             this.pnlChart.Controls.Add(this.gbGy);
+            this.pnlChart.Controls.Add(this.chkAccFwdCalibrated);
             this.pnlChart.Controls.Add(this.gbAcc);
+            this.pnlChart.Controls.Add(this.chkZeroCalibrated);
             this.pnlChart.Controls.Add(this.lblForceRt);
             this.pnlChart.Controls.Add(this.chkForceRt);
             this.pnlChart.Controls.Add(this.lblForceRg);
@@ -154,8 +160,18 @@ namespace ECTunes {
             this.pnlChart.Controls.Add(this.chart1);
             this.pnlChart.Location = new System.Drawing.Point(39, 75);
             this.pnlChart.Name = "pnlChart";
-            this.pnlChart.Size = new System.Drawing.Size(1188, 527);
+            this.pnlChart.Size = new System.Drawing.Size(1201, 527);
             this.pnlChart.TabIndex = 3;
+            // 
+            // chkGyroFwdCalibrated
+            // 
+            this.chkGyroFwdCalibrated.AutoSize = true;
+            this.chkGyroFwdCalibrated.Location = new System.Drawing.Point(1140, 112);
+            this.chkGyroFwdCalibrated.Name = "chkGyroFwdCalibrated";
+            this.chkGyroFwdCalibrated.Size = new System.Drawing.Size(64, 17);
+            this.chkGyroFwdCalibrated.TabIndex = 23;
+            this.chkGyroFwdCalibrated.Text = "Gyro Dir";
+            this.chkGyroFwdCalibrated.UseVisualStyleBackColor = true;
             // 
             // gbGy
             // 
@@ -223,6 +239,16 @@ namespace ECTunes {
             this.lblGyQAngle.TabIndex = 0;
             this.lblGyQAngle.Text = "Q Angle";
             // 
+            // chkAccFwdCalibrated
+            // 
+            this.chkAccFwdCalibrated.AutoSize = true;
+            this.chkAccFwdCalibrated.Location = new System.Drawing.Point(1140, 88);
+            this.chkAccFwdCalibrated.Name = "chkAccFwdCalibrated";
+            this.chkAccFwdCalibrated.Size = new System.Drawing.Size(61, 17);
+            this.chkAccFwdCalibrated.TabIndex = 22;
+            this.chkAccFwdCalibrated.Text = "Acc Dir";
+            this.chkAccFwdCalibrated.UseVisualStyleBackColor = true;
+            // 
             // gbAcc
             // 
             this.gbAcc.Controls.Add(this.tbxAccRMeasure);
@@ -288,6 +314,16 @@ namespace ECTunes {
             this.lblAccQAngle.Size = new System.Drawing.Size(45, 13);
             this.lblAccQAngle.TabIndex = 0;
             this.lblAccQAngle.Text = "Q Angle";
+            // 
+            // chkZeroCalibrated
+            // 
+            this.chkZeroCalibrated.AutoSize = true;
+            this.chkZeroCalibrated.Location = new System.Drawing.Point(1140, 65);
+            this.chkZeroCalibrated.Name = "chkZeroCalibrated";
+            this.chkZeroCalibrated.Size = new System.Drawing.Size(48, 17);
+            this.chkZeroCalibrated.TabIndex = 21;
+            this.chkZeroCalibrated.Text = "Zero";
+            this.chkZeroCalibrated.UseVisualStyleBackColor = true;
             // 
             // lblForceRt
             // 
@@ -481,7 +517,7 @@ namespace ECTunes {
             this.btnStartPause.Location = new System.Drawing.Point(68, 46);
             this.btnStartPause.Name = "btnStartPause";
             this.btnStartPause.Size = new System.Drawing.Size(75, 23);
-            this.btnStartPause.TabIndex = 5;
+            this.btnStartPause.TabIndex = 1;
             this.btnStartPause.Text = "Start";
             this.btnStartPause.UseVisualStyleBackColor = true;
             this.btnStartPause.Click += new System.EventHandler(this.btnStartPause_Click);
@@ -566,7 +602,7 @@ namespace ECTunes {
             this.tsmTools});
             this.msMenu.Location = new System.Drawing.Point(0, 0);
             this.msMenu.Name = "msMenu";
-            this.msMenu.Size = new System.Drawing.Size(1264, 24);
+            this.msMenu.Size = new System.Drawing.Size(1265, 24);
             this.msMenu.TabIndex = 14;
             this.msMenu.Text = "menuStrip1";
             // 
@@ -658,7 +694,7 @@ namespace ECTunes {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1264, 629);
+            this.ClientSize = new System.Drawing.Size(1265, 629);
             this.Controls.Add(this.lblAccelerationThreshold);
             this.Controls.Add(this.lblGyroThreshold);
             this.Controls.Add(this.tbxAccelerationThreshold);
@@ -758,6 +794,9 @@ namespace ECTunes {
         private TextBox tbxAccelerationThreshold;
         private Label lblGyroThreshold;
         private Label lblAccelerationThreshold;
+        private CheckBox chkGyroFwdCalibrated;
+        private CheckBox chkAccFwdCalibrated;
+        private CheckBox chkZeroCalibrated;
     }
 }
 
