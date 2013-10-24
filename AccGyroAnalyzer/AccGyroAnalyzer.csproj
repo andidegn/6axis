@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MyClasses">
+    <Reference Include="MyClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\MyClasses\MyClasses\bin\Debug\MyClasses.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -53,6 +54,7 @@
     <Compile Include="Util\InputBox.cs" />
     <Compile Include="Util\Kalman.cs" />
     <Compile Include="Util\SerialPortConnector.cs" />
+    <Compile Include="Util\Sound.cs" />
     <Compile Include="view\ChartControl.cs" />
     <Compile Include="view\Form1.cs">
       <SubType>Form</SubType>

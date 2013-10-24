@@ -80,13 +80,14 @@ namespace ECTunes {
             this.msMenu = new System.Windows.Forms.MenuStrip();
             this.tsmFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmFile_open = new System.Windows.Forms.ToolStripMenuItem();
+            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmTools = new System.Windows.Forms.ToolStripMenuItem();
             this.chk_tsmTools_CalibrateSignal = new System.Windows.Forms.ToolStripMenuItem();
             this.cbbComPort = new System.Windows.Forms.ComboBox();
             this.btnRefreshComPort = new System.Windows.Forms.Button();
-            this.tbxGyroThreshold = new System.Windows.Forms.TextBox();
+            this.tbxNoiseThreshold = new System.Windows.Forms.TextBox();
             this.tbxAccelerationThreshold = new System.Windows.Forms.TextBox();
-            this.lblGyroThreshold = new System.Windows.Forms.Label();
+            this.lblNoiseThreshold = new System.Windows.Forms.Label();
             this.lblAccelerationThreshold = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.pnlChart.SuspendLayout();
@@ -609,7 +610,8 @@ namespace ECTunes {
             // tsmFile
             // 
             this.tsmFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmFile_open});
+            this.tsmFile_open,
+            this.printToolStripMenuItem});
             this.tsmFile.Name = "tsmFile";
             this.tsmFile.Size = new System.Drawing.Size(37, 20);
             this.tsmFile.Text = "File";
@@ -620,6 +622,13 @@ namespace ECTunes {
             this.tsmFile_open.Size = new System.Drawing.Size(103, 22);
             this.tsmFile_open.Text = "Open";
             this.tsmFile_open.Click += new System.EventHandler(this.tsmFile_open_Click);
+            // 
+            // printToolStripMenuItem
+            // 
+            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.printToolStripMenuItem.Text = "Print";
+            this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
             // 
             // tsmTools
             // 
@@ -656,13 +665,13 @@ namespace ECTunes {
             this.btnRefreshComPort.UseVisualStyleBackColor = true;
             this.btnRefreshComPort.Click += new System.EventHandler(this.btnRefreshComPort_Click);
             // 
-            // tbxGyroThreshold
+            // tbxNoiseThreshold
             // 
-            this.tbxGyroThreshold.Location = new System.Drawing.Point(749, 48);
-            this.tbxGyroThreshold.Name = "tbxGyroThreshold";
-            this.tbxGyroThreshold.Size = new System.Drawing.Size(100, 20);
-            this.tbxGyroThreshold.TabIndex = 17;
-            this.tbxGyroThreshold.Text = "10000";
+            this.tbxNoiseThreshold.Location = new System.Drawing.Point(749, 48);
+            this.tbxNoiseThreshold.Name = "tbxNoiseThreshold";
+            this.tbxNoiseThreshold.Size = new System.Drawing.Size(100, 20);
+            this.tbxNoiseThreshold.TabIndex = 17;
+            this.tbxNoiseThreshold.Text = Form1.g_acc_length_calibration_threshold.ToString();
             // 
             // tbxAccelerationThreshold
             // 
@@ -670,16 +679,16 @@ namespace ECTunes {
             this.tbxAccelerationThreshold.Name = "tbxAccelerationThreshold";
             this.tbxAccelerationThreshold.Size = new System.Drawing.Size(100, 20);
             this.tbxAccelerationThreshold.TabIndex = 18;
-            this.tbxAccelerationThreshold.Text = "10000";
+            this.tbxAccelerationThreshold.Text = Form1.g_acceleration_threshold.ToString();
             // 
-            // lblGyroThreshold
+            // lblNoiseThreshold
             // 
-            this.lblGyroThreshold.AutoSize = true;
-            this.lblGyroThreshold.Location = new System.Drawing.Point(664, 51);
-            this.lblGyroThreshold.Name = "lblGyroThreshold";
-            this.lblGyroThreshold.Size = new System.Drawing.Size(79, 13);
-            this.lblGyroThreshold.TabIndex = 19;
-            this.lblGyroThreshold.Text = "Gyro Threshold";
+            this.lblNoiseThreshold.AutoSize = true;
+            this.lblNoiseThreshold.Location = new System.Drawing.Point(664, 51);
+            this.lblNoiseThreshold.Name = "lblNoiseThreshold";
+            this.lblNoiseThreshold.Size = new System.Drawing.Size(84, 13);
+            this.lblNoiseThreshold.TabIndex = 19;
+            this.lblNoiseThreshold.Text = "Noise Threshold";
             // 
             // lblAccelerationThreshold
             // 
@@ -696,9 +705,9 @@ namespace ECTunes {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1265, 629);
             this.Controls.Add(this.lblAccelerationThreshold);
-            this.Controls.Add(this.lblGyroThreshold);
+            this.Controls.Add(this.lblNoiseThreshold);
             this.Controls.Add(this.tbxAccelerationThreshold);
-            this.Controls.Add(this.tbxGyroThreshold);
+            this.Controls.Add(this.tbxNoiseThreshold);
             this.Controls.Add(this.btnRefreshComPort);
             this.Controls.Add(this.cbbComPort);
             this.Controls.Add(this.btnCalibrate);
@@ -790,13 +799,14 @@ namespace ECTunes {
         private Label lblAccQBias;
         private TextBox tbxAccQAngle;
         private Label lblAccQAngle;
-        private TextBox tbxGyroThreshold;
+        private TextBox tbxNoiseThreshold;
         private TextBox tbxAccelerationThreshold;
-        private Label lblGyroThreshold;
+        private Label lblNoiseThreshold;
         private Label lblAccelerationThreshold;
         private CheckBox chkGyroFwdCalibrated;
         private CheckBox chkAccFwdCalibrated;
         private CheckBox chkZeroCalibrated;
+        private ToolStripMenuItem printToolStripMenuItem;
     }
 }
 
