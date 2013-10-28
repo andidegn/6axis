@@ -33,6 +33,7 @@ namespace ECTunes {
             this.btnReset = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.pnlChart = new System.Windows.Forms.Panel();
+            this.btnResetScale = new System.Windows.Forms.Button();
             this.chkGyroFwdCalibrated = new System.Windows.Forms.CheckBox();
             this.gbGy = new System.Windows.Forms.GroupBox();
             this.tbxGyRMeasure = new System.Windows.Forms.TextBox();
@@ -90,7 +91,6 @@ namespace ECTunes {
             this.tbxAccelerationThreshold = new System.Windows.Forms.TextBox();
             this.lblNoiseThreshold = new System.Windows.Forms.Label();
             this.lblAccelerationThreshold = new System.Windows.Forms.Label();
-            this.btnResetScale = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.pnlChart.SuspendLayout();
             this.gbGy.SuspendLayout();
@@ -167,6 +167,16 @@ namespace ECTunes {
             this.pnlChart.Name = "pnlChart";
             this.pnlChart.Size = new System.Drawing.Size(1207, 531);
             this.pnlChart.TabIndex = 3;
+            // 
+            // btnResetScale
+            // 
+            this.btnResetScale.Location = new System.Drawing.Point(869, 483);
+            this.btnResetScale.Name = "btnResetScale";
+            this.btnResetScale.Size = new System.Drawing.Size(75, 23);
+            this.btnResetScale.TabIndex = 24;
+            this.btnResetScale.Text = "Reset Scale";
+            this.btnResetScale.UseVisualStyleBackColor = true;
+            this.btnResetScale.Click += new System.EventHandler(this.btnResetScale_Click);
             // 
             // chkGyroFwdCalibrated
             // 
@@ -482,7 +492,7 @@ namespace ECTunes {
             this.tkbScale.Name = "tkbScale";
             this.tkbScale.Size = new System.Drawing.Size(716, 45);
             this.tkbScale.TabIndex = 7;
-            this.tkbScale.Value = 25;
+            this.tkbScale.Value = 60;
             this.tkbScale.Scroll += new System.EventHandler(this.tkbScale_Scroll);
             // 
             // chkFullScale
@@ -673,7 +683,6 @@ namespace ECTunes {
             this.tbxNoiseThreshold.Name = "tbxNoiseThreshold";
             this.tbxNoiseThreshold.Size = new System.Drawing.Size(100, 20);
             this.tbxNoiseThreshold.TabIndex = 17;
-            this.tbxNoiseThreshold.Text = Settings.Default["noise_calibration_threshold"].ToString();
             // 
             // tbxAccelerationThreshold
             // 
@@ -681,7 +690,6 @@ namespace ECTunes {
             this.tbxAccelerationThreshold.Name = "tbxAccelerationThreshold";
             this.tbxAccelerationThreshold.Size = new System.Drawing.Size(100, 20);
             this.tbxAccelerationThreshold.TabIndex = 18;
-            this.tbxAccelerationThreshold.Text = Settings.Default["acceleration_threshold"].ToString();
             // 
             // lblNoiseThreshold
             // 
@@ -700,16 +708,6 @@ namespace ECTunes {
             this.lblAccelerationThreshold.Size = new System.Drawing.Size(116, 13);
             this.lblAccelerationThreshold.TabIndex = 20;
             this.lblAccelerationThreshold.Text = "Acceleration Threshold";
-            // 
-            // btnResetScale
-            // 
-            this.btnResetScale.Location = new System.Drawing.Point(869, 483);
-            this.btnResetScale.Name = "btnResetScale";
-            this.btnResetScale.Size = new System.Drawing.Size(75, 23);
-            this.btnResetScale.TabIndex = 24;
-            this.btnResetScale.Text = "Reset Scale";
-            this.btnResetScale.UseVisualStyleBackColor = true;
-            this.btnResetScale.Click += new System.EventHandler(this.btnResetScale_Click);
             // 
             // Form1
             // 
