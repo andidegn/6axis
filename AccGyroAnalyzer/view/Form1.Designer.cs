@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using ECTunes.Properties;
 namespace ECTunes {
     partial class Form1 {
         /// <summary>
@@ -25,9 +26,9 @@ namespace ECTunes {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
@@ -89,6 +90,7 @@ namespace ECTunes {
             this.tbxAccelerationThreshold = new System.Windows.Forms.TextBox();
             this.lblNoiseThreshold = new System.Windows.Forms.Label();
             this.lblAccelerationThreshold = new System.Windows.Forms.Label();
+            this.btnResetScale = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.pnlChart.SuspendLayout();
             this.gbGy.SuspendLayout();
@@ -101,16 +103,16 @@ namespace ECTunes {
             // 
             this.chart1.BorderlineColor = System.Drawing.Color.Black;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(29, 15);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(944, 461);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -137,6 +139,8 @@ namespace ECTunes {
             // 
             // pnlChart
             // 
+            this.pnlChart.AutoSize = true;
+            this.pnlChart.Controls.Add(this.btnResetScale);
             this.pnlChart.Controls.Add(this.chkGyroFwdCalibrated);
             this.pnlChart.Controls.Add(this.gbGy);
             this.pnlChart.Controls.Add(this.chkAccFwdCalibrated);
@@ -161,7 +165,7 @@ namespace ECTunes {
             this.pnlChart.Controls.Add(this.chart1);
             this.pnlChart.Location = new System.Drawing.Point(39, 75);
             this.pnlChart.Name = "pnlChart";
-            this.pnlChart.Size = new System.Drawing.Size(1201, 527);
+            this.pnlChart.Size = new System.Drawing.Size(1207, 531);
             this.pnlChart.TabIndex = 3;
             // 
             // chkGyroFwdCalibrated
@@ -640,9 +644,7 @@ namespace ECTunes {
             // 
             // chk_tsmTools_CalibrateSignal
             // 
-            this.chk_tsmTools_CalibrateSignal.Checked = true;
             this.chk_tsmTools_CalibrateSignal.CheckOnClick = true;
-            this.chk_tsmTools_CalibrateSignal.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chk_tsmTools_CalibrateSignal.Name = "chk_tsmTools_CalibrateSignal";
             this.chk_tsmTools_CalibrateSignal.Size = new System.Drawing.Size(156, 22);
             this.chk_tsmTools_CalibrateSignal.Text = "Calibrate Signal";
@@ -671,7 +673,7 @@ namespace ECTunes {
             this.tbxNoiseThreshold.Name = "tbxNoiseThreshold";
             this.tbxNoiseThreshold.Size = new System.Drawing.Size(100, 20);
             this.tbxNoiseThreshold.TabIndex = 17;
-            this.tbxNoiseThreshold.Text = Form1.g_acc_length_calibration_threshold.ToString();
+            this.tbxNoiseThreshold.Text = Settings.Default["noise_calibration_threshold"].ToString();
             // 
             // tbxAccelerationThreshold
             // 
@@ -679,7 +681,7 @@ namespace ECTunes {
             this.tbxAccelerationThreshold.Name = "tbxAccelerationThreshold";
             this.tbxAccelerationThreshold.Size = new System.Drawing.Size(100, 20);
             this.tbxAccelerationThreshold.TabIndex = 18;
-            this.tbxAccelerationThreshold.Text = Form1.g_acceleration_threshold.ToString();
+            this.tbxAccelerationThreshold.Text = Settings.Default["acceleration_threshold"].ToString();
             // 
             // lblNoiseThreshold
             // 
@@ -698,6 +700,16 @@ namespace ECTunes {
             this.lblAccelerationThreshold.Size = new System.Drawing.Size(116, 13);
             this.lblAccelerationThreshold.TabIndex = 20;
             this.lblAccelerationThreshold.Text = "Acceleration Threshold";
+            // 
+            // btnResetScale
+            // 
+            this.btnResetScale.Location = new System.Drawing.Point(869, 483);
+            this.btnResetScale.Name = "btnResetScale";
+            this.btnResetScale.Size = new System.Drawing.Size(75, 23);
+            this.btnResetScale.TabIndex = 24;
+            this.btnResetScale.Text = "Reset Scale";
+            this.btnResetScale.UseVisualStyleBackColor = true;
+            this.btnResetScale.Click += new System.EventHandler(this.btnResetScale_Click);
             // 
             // Form1
             // 
@@ -807,6 +819,7 @@ namespace ECTunes {
         private CheckBox chkAccFwdCalibrated;
         private CheckBox chkZeroCalibrated;
         private ToolStripMenuItem printToolStripMenuItem;
+        private Button btnResetScale;
     }
 }
 

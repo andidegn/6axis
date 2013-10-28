@@ -22,5 +22,173 @@ namespace ECTunes.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double acc_zero_x {
+            get {
+                return ((double)(this["acc_zero_x"]));
+            }
+            set {
+                this["acc_zero_x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double acc_zero_y {
+            get {
+                return ((double)(this["acc_zero_y"]));
+            }
+            set {
+                this["acc_zero_y"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double acc_zero_z {
+            get {
+                return ((double)(this["acc_zero_z"]));
+            }
+            set {
+                this["acc_zero_z"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double acc_direction_x {
+            get {
+                return ((double)(this["acc_direction_x"]));
+            }
+            set {
+                this["acc_direction_x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double acc_direction_y {
+            get {
+                return ((double)(this["acc_direction_y"]));
+            }
+            set {
+                this["acc_direction_y"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double acc_direction_z {
+            get {
+                return ((double)(this["acc_direction_z"]));
+            }
+            set {
+                this["acc_direction_z"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double gy_zero_x {
+            get {
+                return ((double)(this["gy_zero_x"]));
+            }
+            set {
+                this["gy_zero_x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double gy_zero_y {
+            get {
+                return ((double)(this["gy_zero_y"]));
+            }
+            set {
+                this["gy_zero_y"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double gy_zero_z {
+            get {
+                return ((double)(this["gy_zero_z"]));
+            }
+            set {
+                this["gy_zero_z"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double gy_direction_x {
+            get {
+                return ((double)(this["gy_direction_x"]));
+            }
+            set {
+                this["gy_direction_x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double gy_direction_y {
+            get {
+                return ((double)(this["gy_direction_y"]));
+            }
+            set {
+                this["gy_direction_y"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double gy_direction_z {
+            get {
+                return ((double)(this["gy_direction_z"]));
+            }
+            set {
+                this["gy_direction_z"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int noise_calibration_threshold {
+            get {
+                return ((int)(this["noise_calibration_threshold"]));
+            }
+            set {
+                this["noise_calibration_threshold"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int acceleration_threshold {
+            get {
+                return ((int)(this["acceleration_threshold"]));
+            }
+            set {
+                this["acceleration_threshold"] = value;
+            }
+        }
     }
 }
