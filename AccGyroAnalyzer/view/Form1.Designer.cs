@@ -26,13 +26,16 @@ namespace ECTunes {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.pnlChart = new System.Windows.Forms.Panel();
+            this.lblDirection = new System.Windows.Forms.Label();
+            this.lblVelocity = new System.Windows.Forms.Label();
+            this.chkVelocity = new System.Windows.Forms.CheckBox();
             this.btnResetScale = new System.Windows.Forms.Button();
             this.chkGyroFwdCalibrated = new System.Windows.Forms.CheckBox();
             this.gbGy = new System.Windows.Forms.GroupBox();
@@ -52,10 +55,17 @@ namespace ECTunes {
             this.lblAccQAngle = new System.Windows.Forms.Label();
             this.chkZeroCalibrated = new System.Windows.Forms.CheckBox();
             this.lblForceRt = new System.Windows.Forms.Label();
-            this.chkForceRt = new System.Windows.Forms.CheckBox();
+            this.lblGyY = new System.Windows.Forms.Label();
+            this.lblForceR = new System.Windows.Forms.Label();
+            this.lblGyX = new System.Windows.Forms.Label();
+            this.chkRtot = new System.Windows.Forms.CheckBox();
+            this.lblAccZ = new System.Windows.Forms.Label();
+            this.lblGyZ = new System.Windows.Forms.Label();
+            this.lblAccY = new System.Windows.Forms.Label();
             this.lblForceRg = new System.Windows.Forms.Label();
-            this.chkForceRg = new System.Windows.Forms.CheckBox();
-            this.chkForceR = new System.Windows.Forms.CheckBox();
+            this.lblAccX = new System.Windows.Forms.Label();
+            this.chkRgy = new System.Windows.Forms.CheckBox();
+            this.chkRacc = new System.Windows.Forms.CheckBox();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.chkGyZ = new System.Windows.Forms.CheckBox();
             this.chkGyY = new System.Windows.Forms.CheckBox();
@@ -71,13 +81,6 @@ namespace ECTunes {
             this.tbxRawData = new System.Windows.Forms.TextBox();
             this.btnStartPause = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lblAccX = new System.Windows.Forms.Label();
-            this.lblAccY = new System.Windows.Forms.Label();
-            this.lblAccZ = new System.Windows.Forms.Label();
-            this.lblGyX = new System.Windows.Forms.Label();
-            this.lblGyY = new System.Windows.Forms.Label();
-            this.lblGyZ = new System.Windows.Forms.Label();
-            this.lblForceR = new System.Windows.Forms.Label();
             this.btnCalibrate = new System.Windows.Forms.Button();
             this.msMenu = new System.Windows.Forms.MenuStrip();
             this.tsmFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,16 +106,16 @@ namespace ECTunes {
             // 
             this.chart1.BorderlineColor = System.Drawing.Color.Black;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(29, 15);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(944, 461);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -140,6 +143,9 @@ namespace ECTunes {
             // pnlChart
             // 
             this.pnlChart.AutoSize = true;
+            this.pnlChart.Controls.Add(this.lblDirection);
+            this.pnlChart.Controls.Add(this.lblVelocity);
+            this.pnlChart.Controls.Add(this.chkVelocity);
             this.pnlChart.Controls.Add(this.btnResetScale);
             this.pnlChart.Controls.Add(this.chkGyroFwdCalibrated);
             this.pnlChart.Controls.Add(this.gbGy);
@@ -147,10 +153,17 @@ namespace ECTunes {
             this.pnlChart.Controls.Add(this.gbAcc);
             this.pnlChart.Controls.Add(this.chkZeroCalibrated);
             this.pnlChart.Controls.Add(this.lblForceRt);
-            this.pnlChart.Controls.Add(this.chkForceRt);
+            this.pnlChart.Controls.Add(this.lblGyY);
+            this.pnlChart.Controls.Add(this.lblForceR);
+            this.pnlChart.Controls.Add(this.lblGyX);
+            this.pnlChart.Controls.Add(this.chkRtot);
+            this.pnlChart.Controls.Add(this.lblAccZ);
+            this.pnlChart.Controls.Add(this.lblGyZ);
+            this.pnlChart.Controls.Add(this.lblAccY);
             this.pnlChart.Controls.Add(this.lblForceRg);
-            this.pnlChart.Controls.Add(this.chkForceRg);
-            this.pnlChart.Controls.Add(this.chkForceR);
+            this.pnlChart.Controls.Add(this.lblAccX);
+            this.pnlChart.Controls.Add(this.chkRgy);
+            this.pnlChart.Controls.Add(this.chkRacc);
             this.pnlChart.Controls.Add(this.btnSelectAll);
             this.pnlChart.Controls.Add(this.chkGyZ);
             this.pnlChart.Controls.Add(this.chkGyY);
@@ -167,6 +180,33 @@ namespace ECTunes {
             this.pnlChart.Name = "pnlChart";
             this.pnlChart.Size = new System.Drawing.Size(1207, 531);
             this.pnlChart.TabIndex = 3;
+            // 
+            // lblDirection
+            // 
+            this.lblDirection.AutoSize = true;
+            this.lblDirection.Location = new System.Drawing.Point(987, 499);
+            this.lblDirection.Name = "lblDirection";
+            this.lblDirection.Size = new System.Drawing.Size(0, 13);
+            this.lblDirection.TabIndex = 27;
+            // 
+            // lblVelocity
+            // 
+            this.lblVelocity.AutoSize = true;
+            this.lblVelocity.Location = new System.Drawing.Point(1066, 261);
+            this.lblVelocity.Name = "lblVelocity";
+            this.lblVelocity.Size = new System.Drawing.Size(13, 13);
+            this.lblVelocity.TabIndex = 25;
+            this.lblVelocity.Text = "0";
+            // 
+            // chkVelocity
+            // 
+            this.chkVelocity.AutoSize = true;
+            this.chkVelocity.Location = new System.Drawing.Point(978, 260);
+            this.chkVelocity.Name = "chkVelocity";
+            this.chkVelocity.Size = new System.Drawing.Size(63, 17);
+            this.chkVelocity.TabIndex = 26;
+            this.chkVelocity.Text = "Velocity";
+            this.chkVelocity.UseVisualStyleBackColor = true;
             // 
             // btnResetScale
             // 
@@ -343,60 +383,117 @@ namespace ECTunes {
             // lblForceRt
             // 
             this.lblForceRt.AutoSize = true;
-            this.lblForceRt.Location = new System.Drawing.Point(1066, 262);
+            this.lblForceRt.Location = new System.Drawing.Point(1066, 238);
             this.lblForceRt.Name = "lblForceRt";
             this.lblForceRt.Size = new System.Drawing.Size(13, 13);
             this.lblForceRt.TabIndex = 20;
             this.lblForceRt.Text = "0";
             // 
-            // chkForceRt
+            // lblGyY
             // 
-            this.chkForceRt.AutoSize = true;
-            this.chkForceRt.Checked = true;
-            this.chkForceRt.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkForceRt.Location = new System.Drawing.Point(978, 261);
-            this.chkForceRt.Name = "chkForceRt";
-            this.chkForceRt.Size = new System.Drawing.Size(82, 17);
-            this.chkForceRt.TabIndex = 21;
-            this.chkForceRt.Text = "Force (Rtot)";
-            this.chkForceRt.UseVisualStyleBackColor = true;
+            this.lblGyY.AutoSize = true;
+            this.lblGyY.Location = new System.Drawing.Point(1066, 140);
+            this.lblGyY.Name = "lblGyY";
+            this.lblGyY.Size = new System.Drawing.Size(13, 13);
+            this.lblGyY.TabIndex = 10;
+            this.lblGyY.Text = "0";
+            // 
+            // lblForceR
+            // 
+            this.lblForceR.AutoSize = true;
+            this.lblForceR.Location = new System.Drawing.Point(1066, 191);
+            this.lblForceR.Name = "lblForceR";
+            this.lblForceR.Size = new System.Drawing.Size(13, 13);
+            this.lblForceR.TabIndex = 12;
+            this.lblForceR.Text = "0";
+            // 
+            // lblGyX
+            // 
+            this.lblGyX.AutoSize = true;
+            this.lblGyX.Location = new System.Drawing.Point(1066, 117);
+            this.lblGyX.Name = "lblGyX";
+            this.lblGyX.Size = new System.Drawing.Size(13, 13);
+            this.lblGyX.TabIndex = 9;
+            this.lblGyX.Text = "0";
+            // 
+            // chkRtot
+            // 
+            this.chkRtot.AutoSize = true;
+            this.chkRtot.Location = new System.Drawing.Point(978, 237);
+            this.chkRtot.Name = "chkRtot";
+            this.chkRtot.Size = new System.Drawing.Size(82, 17);
+            this.chkRtot.TabIndex = 21;
+            this.chkRtot.Text = "Force (Rtot)";
+            this.chkRtot.UseVisualStyleBackColor = true;
+            // 
+            // lblAccZ
+            // 
+            this.lblAccZ.AutoSize = true;
+            this.lblAccZ.Location = new System.Drawing.Point(1066, 89);
+            this.lblAccZ.Name = "lblAccZ";
+            this.lblAccZ.Size = new System.Drawing.Size(13, 13);
+            this.lblAccZ.TabIndex = 8;
+            this.lblAccZ.Text = "0";
+            // 
+            // lblGyZ
+            // 
+            this.lblGyZ.AutoSize = true;
+            this.lblGyZ.Location = new System.Drawing.Point(1066, 162);
+            this.lblGyZ.Name = "lblGyZ";
+            this.lblGyZ.Size = new System.Drawing.Size(13, 13);
+            this.lblGyZ.TabIndex = 11;
+            this.lblGyZ.Text = "0";
+            // 
+            // lblAccY
+            // 
+            this.lblAccY.AutoSize = true;
+            this.lblAccY.Location = new System.Drawing.Point(1066, 66);
+            this.lblAccY.Name = "lblAccY";
+            this.lblAccY.Size = new System.Drawing.Size(13, 13);
+            this.lblAccY.TabIndex = 7;
+            this.lblAccY.Text = "0";
             // 
             // lblForceRg
             // 
             this.lblForceRg.AutoSize = true;
-            this.lblForceRg.Location = new System.Drawing.Point(1066, 239);
+            this.lblForceRg.Location = new System.Drawing.Point(1066, 215);
             this.lblForceRg.Name = "lblForceRg";
             this.lblForceRg.Size = new System.Drawing.Size(13, 13);
             this.lblForceRg.TabIndex = 18;
             this.lblForceRg.Text = "0";
             // 
-            // chkForceRg
+            // lblAccX
             // 
-            this.chkForceRg.AutoSize = true;
-            this.chkForceRg.Checked = true;
-            this.chkForceRg.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkForceRg.Location = new System.Drawing.Point(978, 238);
-            this.chkForceRg.Name = "chkForceRg";
-            this.chkForceRg.Size = new System.Drawing.Size(81, 17);
-            this.chkForceRg.TabIndex = 19;
-            this.chkForceRg.Text = "Force (Rgy)";
-            this.chkForceRg.UseVisualStyleBackColor = true;
+            this.lblAccX.AutoSize = true;
+            this.lblAccX.Location = new System.Drawing.Point(1066, 43);
+            this.lblAccX.Name = "lblAccX";
+            this.lblAccX.Size = new System.Drawing.Size(13, 13);
+            this.lblAccX.TabIndex = 6;
+            this.lblAccX.Text = "0";
             // 
-            // chkForceR
+            // chkRgy
             // 
-            this.chkForceR.AutoSize = true;
-            this.chkForceR.Checked = true;
-            this.chkForceR.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkForceR.Location = new System.Drawing.Point(978, 215);
-            this.chkForceR.Name = "chkForceR";
-            this.chkForceR.Size = new System.Drawing.Size(88, 17);
-            this.chkForceR.TabIndex = 17;
-            this.chkForceR.Text = "Force (Racc)";
-            this.chkForceR.UseVisualStyleBackColor = true;
+            this.chkRgy.AutoSize = true;
+            this.chkRgy.Location = new System.Drawing.Point(978, 214);
+            this.chkRgy.Name = "chkRgy";
+            this.chkRgy.Size = new System.Drawing.Size(81, 17);
+            this.chkRgy.TabIndex = 19;
+            this.chkRgy.Text = "Force (Rgy)";
+            this.chkRgy.UseVisualStyleBackColor = true;
+            // 
+            // chkRacc
+            // 
+            this.chkRacc.AutoSize = true;
+            this.chkRacc.Location = new System.Drawing.Point(978, 191);
+            this.chkRacc.Name = "chkRacc";
+            this.chkRacc.Size = new System.Drawing.Size(88, 17);
+            this.chkRacc.TabIndex = 17;
+            this.chkRacc.Text = "Force (Racc)";
+            this.chkRacc.UseVisualStyleBackColor = true;
             // 
             // btnSelectAll
             // 
-            this.btnSelectAll.Location = new System.Drawing.Point(978, 38);
+            this.btnSelectAll.Location = new System.Drawing.Point(978, 14);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(34, 23);
             this.btnSelectAll.TabIndex = 16;
@@ -407,7 +504,7 @@ namespace ECTunes {
             // chkGyZ
             // 
             this.chkGyZ.AutoSize = true;
-            this.chkGyZ.Location = new System.Drawing.Point(978, 186);
+            this.chkGyZ.Location = new System.Drawing.Point(978, 162);
             this.chkGyZ.Name = "chkGyZ";
             this.chkGyZ.Size = new System.Drawing.Size(58, 17);
             this.chkGyZ.TabIndex = 15;
@@ -417,7 +514,7 @@ namespace ECTunes {
             // chkGyY
             // 
             this.chkGyY.AutoSize = true;
-            this.chkGyY.Location = new System.Drawing.Point(978, 163);
+            this.chkGyY.Location = new System.Drawing.Point(978, 139);
             this.chkGyY.Name = "chkGyY";
             this.chkGyY.Size = new System.Drawing.Size(58, 17);
             this.chkGyY.TabIndex = 14;
@@ -427,7 +524,7 @@ namespace ECTunes {
             // chkGyX
             // 
             this.chkGyX.AutoSize = true;
-            this.chkGyX.Location = new System.Drawing.Point(978, 140);
+            this.chkGyX.Location = new System.Drawing.Point(978, 116);
             this.chkGyX.Name = "chkGyX";
             this.chkGyX.Size = new System.Drawing.Size(58, 17);
             this.chkGyX.TabIndex = 13;
@@ -437,7 +534,9 @@ namespace ECTunes {
             // chkAccZ
             // 
             this.chkAccZ.AutoSize = true;
-            this.chkAccZ.Location = new System.Drawing.Point(978, 112);
+            this.chkAccZ.Checked = true;
+            this.chkAccZ.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAccZ.Location = new System.Drawing.Point(978, 88);
             this.chkAccZ.Name = "chkAccZ";
             this.chkAccZ.Size = new System.Drawing.Size(55, 17);
             this.chkAccZ.TabIndex = 12;
@@ -447,7 +546,9 @@ namespace ECTunes {
             // chkAccY
             // 
             this.chkAccY.AutoSize = true;
-            this.chkAccY.Location = new System.Drawing.Point(978, 89);
+            this.chkAccY.Checked = true;
+            this.chkAccY.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAccY.Location = new System.Drawing.Point(978, 65);
             this.chkAccY.Name = "chkAccY";
             this.chkAccY.Size = new System.Drawing.Size(55, 17);
             this.chkAccY.TabIndex = 11;
@@ -457,7 +558,9 @@ namespace ECTunes {
             // chkAccX
             // 
             this.chkAccX.AutoSize = true;
-            this.chkAccX.Location = new System.Drawing.Point(978, 66);
+            this.chkAccX.Checked = true;
+            this.chkAccX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAccX.Location = new System.Drawing.Point(978, 42);
             this.chkAccX.Name = "chkAccX";
             this.chkAccX.Size = new System.Drawing.Size(55, 17);
             this.chkAccX.TabIndex = 10;
@@ -498,7 +601,7 @@ namespace ECTunes {
             // chkFullScale
             // 
             this.chkFullScale.AutoSize = true;
-            this.chkFullScale.Location = new System.Drawing.Point(978, 15);
+            this.chkFullScale.Location = new System.Drawing.Point(1116, 17);
             this.chkFullScale.Name = "chkFullScale";
             this.chkFullScale.Size = new System.Drawing.Size(72, 17);
             this.chkFullScale.TabIndex = 6;
@@ -536,69 +639,6 @@ namespace ECTunes {
             this.btnStartPause.Text = "Start";
             this.btnStartPause.UseVisualStyleBackColor = true;
             this.btnStartPause.Click += new System.EventHandler(this.btnStartPause_Click);
-            // 
-            // lblAccX
-            // 
-            this.lblAccX.AutoSize = true;
-            this.lblAccX.Location = new System.Drawing.Point(1105, 141);
-            this.lblAccX.Name = "lblAccX";
-            this.lblAccX.Size = new System.Drawing.Size(13, 13);
-            this.lblAccX.TabIndex = 6;
-            this.lblAccX.Text = "0";
-            // 
-            // lblAccY
-            // 
-            this.lblAccY.AutoSize = true;
-            this.lblAccY.Location = new System.Drawing.Point(1105, 164);
-            this.lblAccY.Name = "lblAccY";
-            this.lblAccY.Size = new System.Drawing.Size(13, 13);
-            this.lblAccY.TabIndex = 7;
-            this.lblAccY.Text = "0";
-            // 
-            // lblAccZ
-            // 
-            this.lblAccZ.AutoSize = true;
-            this.lblAccZ.Location = new System.Drawing.Point(1105, 187);
-            this.lblAccZ.Name = "lblAccZ";
-            this.lblAccZ.Size = new System.Drawing.Size(13, 13);
-            this.lblAccZ.TabIndex = 8;
-            this.lblAccZ.Text = "0";
-            // 
-            // lblGyX
-            // 
-            this.lblGyX.AutoSize = true;
-            this.lblGyX.Location = new System.Drawing.Point(1105, 215);
-            this.lblGyX.Name = "lblGyX";
-            this.lblGyX.Size = new System.Drawing.Size(13, 13);
-            this.lblGyX.TabIndex = 9;
-            this.lblGyX.Text = "0";
-            // 
-            // lblGyY
-            // 
-            this.lblGyY.AutoSize = true;
-            this.lblGyY.Location = new System.Drawing.Point(1105, 238);
-            this.lblGyY.Name = "lblGyY";
-            this.lblGyY.Size = new System.Drawing.Size(13, 13);
-            this.lblGyY.TabIndex = 10;
-            this.lblGyY.Text = "0";
-            // 
-            // lblGyZ
-            // 
-            this.lblGyZ.AutoSize = true;
-            this.lblGyZ.Location = new System.Drawing.Point(1105, 261);
-            this.lblGyZ.Name = "lblGyZ";
-            this.lblGyZ.Size = new System.Drawing.Size(13, 13);
-            this.lblGyZ.TabIndex = 11;
-            this.lblGyZ.Text = "0";
-            // 
-            // lblForceR
-            // 
-            this.lblForceR.AutoSize = true;
-            this.lblForceR.Location = new System.Drawing.Point(1105, 290);
-            this.lblForceR.Name = "lblForceR";
-            this.lblForceR.Size = new System.Drawing.Size(13, 13);
-            this.lblForceR.TabIndex = 12;
-            this.lblForceR.Text = "0";
             // 
             // btnCalibrate
             // 
@@ -654,7 +694,9 @@ namespace ECTunes {
             // 
             // chk_tsmTools_CalibrateSignal
             // 
+            this.chk_tsmTools_CalibrateSignal.Checked = true;
             this.chk_tsmTools_CalibrateSignal.CheckOnClick = true;
+            this.chk_tsmTools_CalibrateSignal.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chk_tsmTools_CalibrateSignal.Name = "chk_tsmTools_CalibrateSignal";
             this.chk_tsmTools_CalibrateSignal.Size = new System.Drawing.Size(156, 22);
             this.chk_tsmTools_CalibrateSignal.Text = "Calibrate Signal";
@@ -721,13 +763,6 @@ namespace ECTunes {
             this.Controls.Add(this.btnRefreshComPort);
             this.Controls.Add(this.cbbComPort);
             this.Controls.Add(this.btnCalibrate);
-            this.Controls.Add(this.lblForceR);
-            this.Controls.Add(this.lblGyZ);
-            this.Controls.Add(this.lblGyY);
-            this.Controls.Add(this.lblGyX);
-            this.Controls.Add(this.lblAccZ);
-            this.Controls.Add(this.lblAccY);
-            this.Controls.Add(this.lblAccX);
             this.Controls.Add(this.btnStartPause);
             this.Controls.Add(this.pnlChart);
             this.Controls.Add(this.btnDataChart);
@@ -781,7 +816,7 @@ namespace ECTunes {
         private Label lblGyX;
         private Label lblGyY;
         private Label lblGyZ;
-        private CheckBox chkForceR;
+        private CheckBox chkRacc;
         private Label lblForceR;
         private Button btnCalibrate;
         private MenuStrip msMenu;
@@ -792,9 +827,9 @@ namespace ECTunes {
         private ComboBox cbbComPort;
         private Button btnRefreshComPort;
         private Label lblForceRg;
-        private CheckBox chkForceRg;
+        private CheckBox chkRgy;
         private Label lblForceRt;
-        private CheckBox chkForceRt;
+        private CheckBox chkRtot;
         private GroupBox gbGy;
         private TextBox tbxGyRMeasure;
         private Label lblGyRMeasure;
@@ -818,6 +853,9 @@ namespace ECTunes {
         private CheckBox chkZeroCalibrated;
         private ToolStripMenuItem printToolStripMenuItem;
         private Button btnResetScale;
+        private Label lblVelocity;
+        private CheckBox chkVelocity;
+        private Label lblDirection;
     }
 }
 

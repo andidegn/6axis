@@ -24,18 +24,18 @@ using ECTunes.view;
 
 namespace ECTunes {
 	public partial class Form1 : Form {
-		private const double ANGLE_MULTIPLIER = 3.5;
+		private const double ANGLE_MULTIPLIER = 3;
 		private static int G_NOISE_CALIBRATION_THRESHOLD = 0;
 		private static int G_GYRO_THRESHOLD = 2000;
 		private static int G_ACCELERATION_THRESHOLD = 0;
 		//private int g_velocity_calibration_threshold = 0;
 
-		private const int g_num_of_recent_readings = 5;
+		private const int g_num_of_recent_readings = 3;
 
-        //private Vector3D g_v_acc_zero_default = new Vector3D(346600, -7141, -31589);
-        //private Vector3D g_v_acc_direction_default = new Vector3D(-552, -14231, -435);
-        //private Vector3D g_v_gy_zero_default = new Vector3D(817, 679, -4468);
-        //private Vector3D g_v_gy_direction_default = new Vector3D(7764, 2615, -257611);
+		//private Vector3D g_v_acc_zero_default = new Vector3D(346600, -7141, -31589);
+		//private Vector3D g_v_acc_direction_default = new Vector3D(-552, -14231, -435);
+		//private Vector3D g_v_gy_zero_default = new Vector3D(817, 679, -4468);
+		//private Vector3D g_v_gy_direction_default = new Vector3D(7764, 2615, -257611);
 		private const bool G_RUN_CALIBRATE = true;
 		private bool isCalibrationStored = false;
 
@@ -46,6 +46,8 @@ namespace ECTunes {
 		private const int G_SOUND_DEVIDER = 300;
 
 		private int g_jitterCount = 5;
+		private double g_accLength;
+		private double g_gyro_last;
 
 		private int g_calibrationIterations = 10;
 		private int g_calibrationCount;
@@ -81,6 +83,7 @@ namespace ECTunes {
 		private KalmanAngle g_k_gy_z;
 
 		private KalmanAngle g_k_angle;
+		private KalmanAngle g_k_g_angle;
 
 		private DateTime g_LastDT;
 
@@ -89,8 +92,12 @@ namespace ECTunes {
 		Vector3D g_v_acc_zero;
 		Vector3D g_v_acc_direction;
 		Vector3D g_v_gy_zero;
-		Vector3D g_v_gy_last;
 		Vector3D g_v_gy_direction;
+		Vector3D g_v_gy_last;
+		Vector3D g_v_acc_measure;
+		Vector3D g_v_gy_measure;
+
+		double g_v_acc_zero_length;
 
 		DateTime startTime;
 
@@ -106,8 +113,9 @@ namespace ECTunes {
 		public Form1() {
 			InitializeComponent();
 			InitOtherStuff();
-			ChartInit();
-			CalibrationInit();
+			InitChart();
+            InitChk();
+			InitCalibration();
 
 			g_calFwdAcc = true;
 			g_calFwdGy = true;
@@ -123,11 +131,12 @@ namespace ECTunes {
 			g_k_gy_x = new KalmanAngle();
 			g_k_gy_y = new KalmanAngle();
 			g_k_gy_z = new KalmanAngle();
-            g_k_angle = new KalmanAngle();
-            g_v_acc_zero = new Vector3D();
-            g_v_acc_direction = new Vector3D();
-            g_v_gy_zero = new Vector3D();
-            g_v_gy_direction = new Vector3D();
+			g_k_angle = new KalmanAngle();
+			g_k_g_angle = new KalmanAngle();
+			g_v_acc_zero = new Vector3D();
+			g_v_acc_direction = new Vector3D();
+			g_v_gy_zero = new Vector3D();
+			g_v_gy_direction = new Vector3D();
 			g_LastDT = DateTime.Now;
 			g_calibrate = true;
 			g_readyToRun = false;
@@ -136,13 +145,28 @@ namespace ECTunes {
 			g_serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
 			g_recent = new QueueArray<Vector3D>(g_num_of_recent_readings);
 
-            this.tbxAccelerationThreshold.Text = Settings.Default["acceleration_threshold"].ToString();
-            this.tbxNoiseThreshold.Text = Settings.Default["noise_calibration_threshold"].ToString();
+			this.tbxAccelerationThreshold.Text = Settings.Default["acceleration_threshold"].ToString();
+			this.tbxNoiseThreshold.Text = Settings.Default["noise_calibration_threshold"].ToString();
 
 			UpdateThresholds();
 		}
 
-		private void ChartInit() {
+        private void InitChk() {
+            chkAccX.Checked = true;
+            chkAccY.Checked = true;
+            chkAccZ.Checked = true;
+
+            //chkGyX.Checked = true;
+            //chkGyY.Checked = true;
+            //chkGyZ.Checked = true;
+
+            chkRacc.Checked = true;
+            //chkRgy.Checked = true;
+            chkRtot.Checked = true;
+            //chkVelocity.Checked = true;
+        }
+
+		private void InitChart() {
 			g_readings = 0;
 			g_readingIndex = 0;
 			chart1.Series.Clear();
@@ -159,7 +183,7 @@ namespace ECTunes {
 			ChartControl.ChartSetup(chart1, "Velocity", 2, Color.Purple, SeriesChartType.Line, ChartValueType.Int32);
 		}
 
-		private void CalibrationInit() {
+		private void InitCalibration() {
 			g_calibrate = true;
 			g_calFwdAcc = true;
 			g_calFwdGy = true;
@@ -230,7 +254,7 @@ namespace ECTunes {
 			try { g_k_gy_z.setRmeasure(Convert.ToDouble(tbxGyRMeasure.Text, CultureInfo.InvariantCulture)); }
 			catch (Exception) { }
 
-			g_k_angle.setQangle(0.1);
+			//g_k_angle.setQangle(0.1);
 		}
 		#endregion
 
@@ -245,94 +269,101 @@ namespace ECTunes {
 					CalibrateFwdAcc(v_reading_acc_raw);
 					return;
 				}
-                else if (g_calFwdGy) {
-                    CalibrateFwdGy(v_reading_gy_raw);
-                    return;
-                }
+				else if (g_calFwdGy) {
+					CalibrateFwdGy(v_reading_gy_raw);
+					return;
+				}
 				else if (!isCalibrationStored) {
-                    StoreSettings();
+					StoreSettings();
 					MessageBox.Show(String.Format("acc_zero: {0}\nacc_direction: {1}\ngy_zero: {3}\ngy_direction: {2}", g_v_acc_zero.ToString(), g_v_acc_direction.ToString(), g_v_gy_direction, g_v_gy_zero));
 					isCalibrationStored = true;
 				}
 			}
-            else if (g_calibrate) {
-                g_calibrate = false;
-                g_calFwdAcc = false;
-                g_calFwdGy = false;
-                g_readyToRun = true;
-                LoadSettings();
+			else if (g_calibrate) {
+				LoadSettings();
+				g_calibrate = false;
+				g_calFwdAcc = false;
+				g_calFwdGy = false;
+				g_readyToRun = true;
 			}
 		}
 
-        private void CalibrateZero(Vector3D acc, Vector3D gy) {
-            if (g_calibrationCount == g_calibrationIterations) {
-                g_calibrationCount = 0;
-                g_v_acc_zero = g_v_acc_zero / g_calibrationIterations;
-                g_v_gy_zero = g_v_gy_zero / g_calibrationIterations;
-                g_v_gy_last = g_v_gy_zero;
-                g_calibrate = false;
-                SetCalibrateIndicator(0, true);
-            }
-            else {
-                g_v_acc_zero += acc;
-                g_v_gy_zero += gy;
+		private void CalibrateZero(Vector3D acc, Vector3D gy) {
+			if (g_calibrationCount == g_calibrationIterations) {
+				g_calibrationCount = 0;
+				g_v_acc_zero = g_v_acc_zero / g_calibrationIterations;
+				g_v_gy_zero = g_v_gy_zero / g_calibrationIterations;
+				g_v_gy_last = g_v_gy_zero;
+				g_v_acc_zero_length = g_v_acc_zero.Length();
+				g_calibrate = false;
+				SetCalibrateIndicator(0, true);
+				//MessageBox.Show(g_v_acc_zero.Length().ToString());
+			}
+			else {
+				g_v_acc_zero += acc;
+				g_v_gy_zero += gy;
 
-                g_calibrationCount++;
-                return;
-            }
-        }
+				g_calibrationCount++;
+			}
+		}
 
-        private void CalibrateFwdAcc(Vector3D acc) {
-            if (acc.Length() > 10000) {
-                g_v_acc_direction = acc;
-                g_calFwdAcc = false;
-                SetCalibrateIndicator(1, true);
-            }
-        }
+		private void CalibrateFwdAcc(Vector3D acc) {
+			if (acc.Length() > 7000) {
+				if (g_calibrationCount == g_calibrationIterations) {
+					g_v_acc_direction /= g_calibrationIterations;
+					g_calFwdAcc = false;
+					SetCalibrateIndicator(1, true);
+				}
+				else {
+					g_v_acc_direction += acc;
+					g_calibrationCount++;
+				}
+			}
+		}
 
-        //private void CalibrateFwdAcc(Vector3D acc) {
-        //    if (acc.Length() > 10000) {
-        //        if (g_calibrationCount == g_calibrationIterations) {
-        //            g_v_acc_direction /= g_calibrationIterations;
-        //            g_calFwdAcc = false;
-        //            SetCalibrateIndicator(1, true);
-        //        }
-        //        else {
-        //            g_v_acc_direction += acc;
-        //            g_calibrationCount++;
-        //        }
-        //    }
-        //}
+		//private void CalibrateFwdAcc(Vector3D acc) {
+		//    if (acc.Length() > 10000) {
+		//        if (g_calibrationCount == g_calibrationIterations) {
+		//            g_v_acc_direction /= g_calibrationIterations;
+		//            g_calFwdAcc = false;
+		//            SetCalibrateIndicator(1, true);
+		//        }
+		//        else {
+		//            g_v_acc_direction += acc;
+		//            g_calibrationCount++;
+		//        }
+		//    }
+		//}
 
-        private void CalibrateFwdGy(Vector3D gy) {
+		private void CalibrateFwdGy(Vector3D gy) {
 			double gy_len = gy.Length();
-            if (gy_len > 20000) {
-                g_v_gy_direction = gy;
-                g_calFwdGy = false;
-                SetCalibrateIndicator(2, true);
-                g_angle = 0;
-                g_velocity = 0;
-                g_readyToRun = true;
-            }
-        }
+			if (gy_len > 20000) {
+				g_v_gy_direction = gy;
+				g_calFwdGy = false;
+				SetCalibrateIndicator(2, true);
+				g_angle = 0;
+				g_velocity = 0;
+				g_readyToRun = true;
+			}
+		}
 
-        //private void CalibrateFwd(Vector3D acc, Vector3D gy) {
-        //    double gy_len = gy.Length();
-        //    if (!g_calFwdAcc && gy_len > 20000) {
-        //        g_v_gy_direction = gy;
-        //        g_calFwdGy = false;
-        //        SetCalibrateIndicator(2, true);
-        //        g_angle = 0;
-        //        g_velocity = 0;
-        //        g_readyToRun = true;
-        //    }
-        //    else if (g_calFwdAcc && acc.Length() > 10000) {
-        //        g_v_acc_direction = acc;
-        //        g_calFwdAcc = false;
-        //        SetCalibrateIndicator(1, true);
-        //    }
-        //    return;
-        //}
+		//private void CalibrateFwd(Vector3D acc, Vector3D gy) {
+		//    double gy_len = gy.Length();
+		//    if (!g_calFwdAcc && gy_len > 20000) {
+		//        g_v_gy_direction = gy;
+		//        g_calFwdGy = false;
+		//        SetCalibrateIndicator(2, true);
+		//        g_angle = 0;
+		//        g_velocity = 0;
+		//        g_readyToRun = true;
+		//    }
+		//    else if (g_calFwdAcc && acc.Length() > 10000) {
+		//        g_v_acc_direction = acc;
+		//        g_calFwdAcc = false;
+		//        SetCalibrateIndicator(1, true);
+		//    }
+		//    return;
+		//}
 
 		private void CorrectByOffset(ref Vector3D v_reading_acc_raw, ref Vector3D v_reading_gy_raw) {
 			// Accelerometer
@@ -342,42 +373,42 @@ namespace ECTunes {
 			v_reading_gy_raw = v_reading_gy_raw - g_v_gy_zero;
 		}
 
-        private void StoreSettings() {
-            Settings.Default["acc_zero_x"] = g_v_acc_zero.x;
-            Settings.Default["acc_zero_y"] = g_v_acc_zero.y;
-            Settings.Default["acc_zero_z"] = g_v_acc_zero.z;
+		private void StoreSettings() {
+			Settings.Default["acc_zero_x"] = g_v_acc_zero.x;
+			Settings.Default["acc_zero_y"] = g_v_acc_zero.y;
+			Settings.Default["acc_zero_z"] = g_v_acc_zero.z;
 
-            Settings.Default["acc_direction_x"] = g_v_acc_direction.x;
-            Settings.Default["acc_direction_y"] = g_v_acc_direction.y;
-            Settings.Default["acc_direction_z"] = g_v_acc_direction.z;
+			Settings.Default["acc_direction_x"] = g_v_acc_direction.x;
+			Settings.Default["acc_direction_y"] = g_v_acc_direction.y;
+			Settings.Default["acc_direction_z"] = g_v_acc_direction.z;
 
-            Settings.Default["gy_zero_x"] = g_v_gy_zero.x;
-            Settings.Default["gy_zero_y"] = g_v_gy_zero.y;
-            Settings.Default["gy_zero_z"] = g_v_gy_zero.z;
+			Settings.Default["gy_zero_x"] = g_v_gy_zero.x;
+			Settings.Default["gy_zero_y"] = g_v_gy_zero.y;
+			Settings.Default["gy_zero_z"] = g_v_gy_zero.z;
 
-            Settings.Default["gy_direction_x"] = g_v_gy_direction.x;
-            Settings.Default["gy_direction_y"] = g_v_gy_direction.y;
-            Settings.Default["gy_direction_z"] = g_v_gy_direction.z;
-            Settings.Default.Save();
-        }
+			Settings.Default["gy_direction_x"] = g_v_gy_direction.x;
+			Settings.Default["gy_direction_y"] = g_v_gy_direction.y;
+			Settings.Default["gy_direction_z"] = g_v_gy_direction.z;
+			Settings.Default.Save();
+		}
 
-        private void LoadSettings() {
-            g_v_acc_zero.x = (double)Settings.Default["acc_zero_x"];
-            g_v_acc_zero.y = (double)Settings.Default["acc_zero_y"];
-            g_v_acc_zero.z = (double)Settings.Default["acc_zero_z"];
+		private void LoadSettings() {
+			g_v_acc_zero.x = (double)Settings.Default["acc_zero_x"];
+			g_v_acc_zero.y = (double)Settings.Default["acc_zero_y"];
+			g_v_acc_zero.z = (double)Settings.Default["acc_zero_z"];
 
-            g_v_acc_direction.x = (double)Settings.Default["acc_direction_x"];
-            g_v_acc_direction.y = (double)Settings.Default["acc_direction_y"];
-            g_v_acc_direction.z = (double)Settings.Default["acc_direction_z"];
+			g_v_acc_direction.x = (double)Settings.Default["acc_direction_x"];
+			g_v_acc_direction.y = (double)Settings.Default["acc_direction_y"];
+			g_v_acc_direction.z = (double)Settings.Default["acc_direction_z"];
 
-            g_v_gy_zero.x = (double)Settings.Default["gy_zero_x"];
-            g_v_gy_zero.y = (double)Settings.Default["gy_zero_y"];
-            g_v_gy_zero.z = (double)Settings.Default["gy_zero_z"];
+			g_v_gy_zero.x = (double)Settings.Default["gy_zero_x"];
+			g_v_gy_zero.y = (double)Settings.Default["gy_zero_y"];
+			g_v_gy_zero.z = (double)Settings.Default["gy_zero_z"];
 
-            g_v_gy_direction.x = (double)Settings.Default["gy_direction_x"];
-            g_v_gy_direction.y = (double)Settings.Default["gy_direction_y"];
-            g_v_gy_direction.z = (double)Settings.Default["gy_direction_z"];
-        }
+			g_v_gy_direction.x = (double)Settings.Default["gy_direction_x"];
+			g_v_gy_direction.y = (double)Settings.Default["gy_direction_y"];
+			g_v_gy_direction.z = (double)Settings.Default["gy_direction_z"];
+		}
 
 		/// <summary>
 		/// Sets a visual indicator on the GUI on which systems are calibrated
@@ -476,17 +507,19 @@ namespace ECTunes {
 
 			// Gets the projection vector for both accelerometer and gyro. 
 			// This is the directional vector with the correct orientation
-			Vector3D v_gy_projection = Vector.Projection(v_gy, g_v_gy_direction);
-			Vector3D v_acc_projection = Vector.Projection(v_acc, g_v_acc_direction);
+			Vector v_gy_projection = Vector.Projection(v_gy, g_v_gy_direction);
+			Vector v_acc_projection = Vector.Projection(v_acc, g_v_acc_direction);
 
 			// Gets the angle between the directionally calibrated vector 
 			// and the current measured vector from the gyro and the accelerometer
-			double gyroAngle = Vector.Angle(v_gy, g_v_gy_direction);
-			double accAngle = Vector.Angle(v_acc, g_v_acc_direction);
+            double gyroAngle = v_gy.Angle(g_v_gy_direction);
+            double accAngle = v_acc.Angle(g_v_acc_direction);
+            //double gyroAngle = Vector.Angle(v_gy, g_v_gy_direction);
+            //double accAngle = Vector.Angle(v_acc, g_v_acc_direction);
 
 			// Gets the length of the projected (directional) vector 
 			// (ie. the acceleration in the desired direction)
-			double accLength = Vector.ProjectionLenght(v_acc, g_v_acc_direction);
+			g_accLength = Vector.ProjectionLenght(v_acc, g_v_acc_direction);
 
 			double gyroValue = v_gy_projection.Length();
 
@@ -494,55 +527,74 @@ namespace ECTunes {
 			UpdateThresholds();
 
 			double acceleration = 0.0;
-				if (gyroAngle < 90)
+			//if (gyroValue > g_gyro_last) {
+			g_k_g_angle.setQangle(0.1);
+			g_k_g_angle.setQbias(0.03);
+			//g_angle = g_k_g_angle.getAngle(g_accLength, gyroValue, dt);
+			if (gyroAngle < 90) {
+				//if (gyroValue > g_gyro_last)
 					g_angle -= (gyroValue * dt) * ANGLE_MULTIPLIER;
-				else
-					g_angle += (gyroValue * dt) * ANGLE_MULTIPLIER;
-			if (gyroValue < G_GYRO_THRESHOLD) {
-				//g_angle = accLength;
-				acceleration = accLength - Math.Abs(g_angle);
 			}
-				//acceleration = accLength;
+			else {
+				//if (gyroValue < g_gyro_last)
+					g_angle += (gyroValue * dt) * ANGLE_MULTIPLIER;
+			}
+			//}
+			g_gyro_last = gyroValue;
 
+			//if (gyroValue < G_GYRO_THRESHOLD) {
+				//g_angle = accLength;
+				acceleration = g_accLength - Math.Abs(g_angle);
+                //acceleration = g_accLength;
+			//}
+			//acceleration = accLength - v_test_length;
 			if (acceleration > G_ACCELERATION_THRESHOLD)
 				CalculateAcceleration(accAngle, acceleration, dt);
 
-			if (g_velocity < 0)
-				g_velocity = 0;
 			//else if (g_velocity > 1000000)
 			//    g_velocity = 1000000;
 
-			if (chkAccX.Checked) AddNewPoint("acc_x", g_readingIndex, GetAverage().Length());
-			if (chkAccY.Checked) AddNewPoint("acc_y", g_readingIndex, g_recent.First().Length());
-			if (chkAccZ.Checked) AddNewPoint("acc_z", g_readingIndex, v_gy_projection.Length());
+			if (g_readings % 1 == 0) {
+				//if (chkAccX.Checked) AddNewPoint("acc_x", g_readingIndex, GetAverage().Length());
+				//if (chkAccY.Checked) AddNewPoint("acc_y", g_readingIndex, g_recent.First().Length());
+				//if (chkAccZ.Checked) AddNewPoint("acc_z", g_readingIndex, v_gy_projection.Length());
+				if (chkAccX.Checked) AddNewPoint("acc_x", g_readingIndex, v_acc.x);
+				if (chkAccY.Checked) AddNewPoint("acc_y", g_readingIndex, v_acc.y);
+				if (chkAccZ.Checked) AddNewPoint("acc_z", g_readingIndex, v_acc.z);
 
-			if (chkGyX.Checked) AddNewPoint("gy_x", g_readingIndex, v_gy.x);
-			if (chkGyY.Checked) AddNewPoint("gy_y", g_readingIndex, v_gy.y);
-			if (chkGyZ.Checked) AddNewPoint("gy_z", g_readingIndex, v_gy.z);
+				if (chkGyX.Checked) AddNewPoint("gy_x", g_readingIndex, v_gy.x);
+				if (chkGyY.Checked) AddNewPoint("gy_y", g_readingIndex, v_gy.y);
+				if (chkGyZ.Checked) AddNewPoint("gy_z", g_readingIndex, v_gy.z);
 
-			if (chkForceR.Checked) AddNewPoint("Racc", g_readingIndex, acceleration);
-			if (chkForceRg.Checked) AddNewPoint("GAng", g_readingIndex, g_angle);
-			if (chkForceRt.Checked) AddNewPoint("AccLen", g_readingIndex, accLength);
-            if (chkForceRt.Checked) AddNewPoint("Velocity", g_readingIndex, g_velocity);
+                //if (chkForceR.Checked) AddNewPoint("Racc", g_readingIndex, acceleration);
+                if (chkRacc.Checked) AddNewPoint("Racc", g_readingIndex, v_acc.Length());
+				if (chkRgy.Checked) AddNewPoint("GAng", g_readingIndex, g_angle);
+				if (chkRtot.Checked) AddNewPoint("AccLen", g_readingIndex, g_accLength);
+				if (chkVelocity.Checked) AddNewPoint("Velocity", g_readingIndex, g_velocity);
+			}
 		}
 
 		private void CalculateAcceleration(double accAngle, double acceleration, double deltaTime) {
-			if (g_velocity < 100) {
-				if (accAngle < 90)
+			if (g_velocity < 1000) {
+				if (accAngle <= 45)
 					g_fwd = true;
-				else
+				else if (accAngle >= 135)
 					g_fwd = false;
 			}
-			if (g_fwd)
+			if (g_fwd) {
 				if (accAngle < 90)
 					g_velocity += acceleration * deltaTime * G_ACC_OFFSET_ACCELERATE;
 				else
 					g_velocity -= acceleration * deltaTime * G_ACC_OFFSET_DECELERATE;
-			else
+			}
+			else {
 				if (accAngle >= 90)
 					g_velocity += acceleration * deltaTime * G_ACC_OFFSET_DECELERATE;
 				else
 					g_velocity -= acceleration * deltaTime * G_ACC_OFFSET_ACCELERATE;
+			}
+			if (g_velocity < 0)
+				g_velocity = 0;
 		}
 
 		private double CalcAngle(double value) {
@@ -574,10 +626,14 @@ namespace ECTunes {
 				case "gy_y": lblGyY.Text = y.ToString(); break;
 				case "gy_z": lblGyZ.Text = y.ToString(); break;
 				case "Racc": lblForceR.Text = y.ToString(); break;
-				case "GAng": lblForceRg.Text = y.ToString(); break;
+				case "GAng": lblForceRg.Text = y.ToString();
+					//y = g_fwd ? 10000 : -10000;
+					break;
 				case "AccLen": lblForceRt.Text = y.ToString(); break;
+				case "Velocity": lblVelocity.Text = y.ToString(); break;
 				default: break;
 			}
+			lblDirection.Text = g_fwd ? "FWD" : "RWD";
 			chart1.Series[seriesName].Points.AddXY((double)x, (double)y);
 			ZoomTrigger();
 		}
@@ -598,42 +654,43 @@ namespace ECTunes {
 
 		public void PrintCSV(StreamReader sr) {
 			String line;
-			//int DelayInMs = 30;
 			while ((line = sr.ReadLine()) != null) {
-				//double dt = (double)DelayInMs / 1000.0;
 				ProcessData(line);
-				//Thread.Sleep(DelayInMs);
 			}
 		}
 
 		private void ProcessData(String data) {
 			g_readings++;
+
+			// Creates variables
 			Vector3D acc;
 			Vector3D gy;
 			double deltaTime;
-			try {
+			try {   // Gets the readings from the data String and stores them in the out variables
 				if (GetReadings(data, out acc, out gy, out deltaTime)) {
-					if (!g_calibrate)
-						CorrectByOffset(ref acc, ref gy);
+					// If zero has been calibrated, correct the offset
+                    if (!g_calibrate)
+                        CorrectByOffset(ref acc, ref gy);
+					// Goto Calibrate section
 					Calibrate(acc, gy);
+					// If readyToRun (is set when fully calibrated)
 					if (g_readyToRun) {
 						//Floating calibration
-						if (g_readings > g_num_of_recent_readings && IsStationary(acc, GetAverage(), G_NOISE_CALIBRATION_THRESHOLD))
-							//if (g_velocity < g_velocity_calibration_threshold)
-							//    CalibrationInit();
-							//g_velocity *= 0.8;
+						if (g_readings > g_num_of_recent_readings && IsStationary(acc, GetAverage(), G_NOISE_CALIBRATION_THRESHOLD)) {
 							g_velocity = 0;
-						if (acc.Length() < 5000)
-							g_angle = 0;
+							g_angle = g_accLength;
+						}
 
 						g_LastDT = DateTime.Now;
 
-						FilterAcc(ref acc, ref gy, deltaTime);
-
+						// Sets up the filter using the values from the GUI
 						SetupFilter();
 
+						// Filters the accelerometer and the gyro data
+						FilterAcc(ref acc, ref gy, deltaTime);
 						FilterGyro(ref gy, deltaTime);
 
+						// Displays the data
 						printRawData(acc, gy, deltaTime);
 						if (g_input == Input.CSV)
 							Thread.Sleep((int)(deltaTime * 1000) + 6);
@@ -679,8 +736,8 @@ namespace ECTunes {
 				String path = Directory.GetCurrentDirectory() + "\\Reading " + startTime.ToString("yyyy-MM-dd HH-mm-ss") + ".txt";
 
 				System.IO.StreamWriter file = new System.IO.StreamWriter(path, true);
-                if (readFromCom.Length > 1)
-				    file.WriteLine(readFromCom.Substring(0, readFromCom.Length - 1) + "," + dt);
+				if (readFromCom.Length > 1)
+					file.WriteLine(readFromCom.Substring(0, readFromCom.Length - 1) + "," + dt);
 
 				file.Close();
 
@@ -710,8 +767,8 @@ namespace ECTunes {
 
 		private void btnReset_Click(object sender, EventArgs e) {
 			//running = false;
-			ChartInit();
-			CalibrationInit();
+			InitChart();
+			InitCalibration();
 			this.Invoke(new EventHandler(ResetEH));
 			//if (serialPort.IsOpen)
 			//    try {
@@ -733,13 +790,14 @@ namespace ECTunes {
 				startTime = DateTime.Now;
 				btnStartPause.Text = "Pause";
 				g_running = true;
-				g_port = cbbComPort.SelectedItem.ToString();
-				if (g_input == Input.COM && !g_serialPort.IsOpen) {
+                if (g_input == Input.COM && !g_serialPort.IsOpen) {
+                    g_port = cbbComPort.SelectedItem.ToString();
 					InitOtherStuff();
 				}
-                //Thread t = new Thread(() => PlaySound());
-                //t.IsBackground = true;
-                //t.Start();
+				btnReset_Click(sender, e);
+				//Thread t = new Thread(() => PlaySound());
+				//t.IsBackground = true;
+				//t.Start();
 			}
 			else {
 				btnStartPause.Text = "Start";
@@ -769,19 +827,21 @@ namespace ECTunes {
 			chkGyY.Checked = true;
 			chkGyZ.Checked = true;
 
-			chkForceR.Checked = true;
-			chkForceRg.Checked = true;
+			chkRacc.Checked = true;
+			chkRgy.Checked = true;
 		}
 
 		private void btnCalibrate_Click(object sender, EventArgs e) {
 			chk_tsmTools_CalibrateSignal.Checked = true;
-			CalibrationInit();
+			InitCalibration();
 		}
 
 		private void tsmFile_open_Click(object sender, EventArgs e) {
 			g_input = Input.CSV;
 
 			g_threadKill = true;
+            InitChart();
+            chk_tsmTools_CalibrateSignal.Checked = true;
 
 			btnReset_Click(sender, e);
 

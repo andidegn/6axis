@@ -38,11 +38,11 @@ namespace ECTunes.Util {
 
         public KalmanAngle() {
 
-            /* We will set the varibles like so, these can also be tuned by the user */
+            /* We will set the variables like so, these can also be tuned by the user */
             Reset();
 
             // Reset bias
-            // Since we assume tha the bias is 0 and we know the starting angle (use setAngle), 
+            // Since we assume the the bias is 0 and we know the starting angle (use setAngle), 
             //the error covariance matrix is set like so - see: http://en.wikipedia.org/wiki/Kalman_filter#Example_application.2C_technical
             SetDefaults();
         }
