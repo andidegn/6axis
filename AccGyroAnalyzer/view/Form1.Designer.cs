@@ -26,9 +26,9 @@ namespace ECTunes {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
@@ -106,16 +106,16 @@ namespace ECTunes {
             // 
             this.chart1.BorderlineColor = System.Drawing.Color.Black;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(29, 15);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(944, 461);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -534,8 +534,6 @@ namespace ECTunes {
             // chkAccZ
             // 
             this.chkAccZ.AutoSize = true;
-            this.chkAccZ.Checked = true;
-            this.chkAccZ.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAccZ.Location = new System.Drawing.Point(978, 88);
             this.chkAccZ.Name = "chkAccZ";
             this.chkAccZ.Size = new System.Drawing.Size(55, 17);
@@ -546,8 +544,6 @@ namespace ECTunes {
             // chkAccY
             // 
             this.chkAccY.AutoSize = true;
-            this.chkAccY.Checked = true;
-            this.chkAccY.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAccY.Location = new System.Drawing.Point(978, 65);
             this.chkAccY.Name = "chkAccY";
             this.chkAccY.Size = new System.Drawing.Size(55, 17);
@@ -558,8 +554,6 @@ namespace ECTunes {
             // chkAccX
             // 
             this.chkAccX.AutoSize = true;
-            this.chkAccX.Checked = true;
-            this.chkAccX.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAccX.Location = new System.Drawing.Point(978, 42);
             this.chkAccX.Name = "chkAccX";
             this.chkAccX.Size = new System.Drawing.Size(55, 17);
@@ -590,7 +584,7 @@ namespace ECTunes {
             this.tkbScale.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tkbScale.LargeChange = 50;
             this.tkbScale.Location = new System.Drawing.Point(110, 483);
-            this.tkbScale.Maximum = 500;
+            this.tkbScale.Maximum = 1000;
             this.tkbScale.Minimum = 10;
             this.tkbScale.Name = "tkbScale";
             this.tkbScale.Size = new System.Drawing.Size(716, 45);
@@ -694,9 +688,7 @@ namespace ECTunes {
             // 
             // chk_tsmTools_CalibrateSignal
             // 
-            this.chk_tsmTools_CalibrateSignal.Checked = true;
             this.chk_tsmTools_CalibrateSignal.CheckOnClick = true;
-            this.chk_tsmTools_CalibrateSignal.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chk_tsmTools_CalibrateSignal.Name = "chk_tsmTools_CalibrateSignal";
             this.chk_tsmTools_CalibrateSignal.Size = new System.Drawing.Size(156, 22);
             this.chk_tsmTools_CalibrateSignal.Text = "Calibrate Signal";
