@@ -39,8 +39,8 @@ namespace ECTunes {
 		private const bool G_RUN_CALIBRATE = true;
 		private bool isCalibrationStored = false;
 
-		private const double G_ACC_OFFSET_ACCELERATE = 10.0;
-		private const double G_ACC_OFFSET_DECELERATE = 10.0;
+		private const double G_ACC_OFFSET_ACCELERATE = 2.0;
+		private const double G_ACC_OFFSET_DECELERATE = 2.0;
 
 		private const int G_SOUND_CUTOFF_VELOCITY = 20000;
 		private const int G_SOUND_DEVIDER = 300;
@@ -760,8 +760,8 @@ namespace ECTunes {
                         SetupFilter();
 
                         // Filters the accelerometer and the gyro data
-                        //FilterAcc(ref acc, ref gy, deltaTime);
-                        //FilterGyro(ref gy, deltaTime);
+                        FilterAcc(ref acc, ref gy, deltaTime);
+                        FilterGyro(ref gy, deltaTime);
 
                         // Displays the data
                         printRawData(acc, gy, deltaTime);
