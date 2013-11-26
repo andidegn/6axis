@@ -30,7 +30,9 @@ namespace ECTunes {
 		private static int G_ACCELERATION_THRESHOLD = 0;
 		//private int g_velocity_calibration_threshold = 0;
 
-		private const int g_num_of_recent_readings = 3;
+		private const int g_num_of_recent_readings = 10;
+
+        private const int g_lower_velocity_detector = 500;
 
 		//private Vector3D g_v_acc_zero_default = new Vector3D(346600, -7141, -31589);
 		//private Vector3D g_v_acc_direction_default = new Vector3D(-552, -14231, -435);
@@ -68,10 +70,12 @@ namespace ECTunes {
 		private bool g_comOpen = false;
 		private Input g_input;
 
+        private double g_acceleration;
 		private double g_velocity;
 		private double g_angle;
 		bool g_fwd;
 		bool g_readyToRun;
+
 
 
 		private KalmanAngle g_k_acc_x;
@@ -100,6 +104,8 @@ namespace ECTunes {
 		DateTime startTime;
 
 		IQueue<Vector3D> g_recent;
+        IQueue<double> g_noise;
+        double g_prev_acc_length;
 
 		//double angle_offset;
 
@@ -144,8 +150,9 @@ namespace ECTunes {
 			g_comOpen = Util.SerialPortConnector.SerialSetup(g_serialPort, g_port);
 			g_serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
 			g_recent = new QueueArray<Vector3D>(g_num_of_recent_readings);
+            g_noise = new QueueArray<double>(g_num_of_recent_readings);
 
-			this.tbxAccelerationThreshold.Text = Settings.Default["acceleration_threshold"].ToString();
+                this.tbxAccelerationThreshold.Text = Settings.Default["acceleration_threshold"].ToString();
 			this.tbxNoiseThreshold.Text = Settings.Default["noise_calibration_threshold"].ToString();
 
 			UpdateThresholds();
@@ -158,7 +165,7 @@ namespace ECTunes {
 
 			//chkGyX.Checked = true;
 			//chkGyY.Checked = true;
-			//chkGyZ.Checked = true;
+            //chkGyZ.Checked = true;
 
             chkRacc.Checked = true;
             chkRgy.Checked = true;
@@ -171,16 +178,16 @@ namespace ECTunes {
 			g_readingIndex = 0;
 			chart1.Series.Clear();
 			chart1.ChartAreas[0].AxisX.Minimum = 0;
-			ChartControl.ChartSetup(chart1, "acc_x", 2, Color.DarkRed, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "acc_y", 2, Color.DarkGreen, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "acc_z", 2, Color.DarkBlue, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "gy_x", 2, Color.Red, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "gy_y", 2, Color.Green, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "gy_z", 2, Color.Blue, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "Racc", 2, Color.DarkOrange, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "GAng", 2, Color.Yellow, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "AccLen", 2, Color.Black, SeriesChartType.Line, ChartValueType.Int32);
-			ChartControl.ChartSetup(chart1, "Velocity", 2, Color.Purple, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "acc_x", 1, Color.DarkRed, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "acc_y", 1, Color.DarkGreen, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "acc_z", 1, Color.DarkBlue, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "gy_x", 1, Color.Red, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "gy_y", 1, Color.Green, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "gy_z", 1, Color.Blue, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "Racc", 1, Color.DarkOrange, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "GAng", 1, Color.Yellow, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "AccLen", 1, Color.Black, SeriesChartType.Line, ChartValueType.Int32);
+			ChartControl.ChartSetup(chart1, "Velocity", 1, Color.Purple, SeriesChartType.Line, ChartValueType.Int32);
 		}
 
 		private void InitCalibration() {
@@ -191,6 +198,7 @@ namespace ECTunes {
 			g_calibrationCount = 0;
 			g_angle = 0;
 			g_velocity = 0;
+            g_prev_acc_length = 0;
 
 			g_accXOffset = 0;
 			g_accYOffset = 0;
@@ -353,6 +361,13 @@ namespace ECTunes {
 			// Accelerometer
 			v_reading_acc_raw = v_reading_acc_raw - g_v_acc_zero;
 
+            if (v_reading_acc_raw.x > 0)
+                v_reading_acc_raw.x *= 1.06;
+            if (v_reading_acc_raw.y > 0)
+                v_reading_acc_raw.y *= 1.06;
+            if (v_reading_acc_raw.z > 0)
+                v_reading_acc_raw.z *= 1.06;
+
 			// Gyro
 			v_reading_gy_raw = v_reading_gy_raw - g_v_gy_zero;
 		}
@@ -511,7 +526,7 @@ namespace ECTunes {
 
 			Vector v_gy_projection = Vector.Projection(v_gy, g_v_gy_direction);
 			double gyroValue = v_gy_projection.Length();
-            if (gyroValue > 30)
+            //if (gyroValue > 30)
                 //g_angle = g_accLength;
                 if (gyroAngle < 90) {
                     //if (gyroValue > g_gyro_last)
@@ -526,17 +541,17 @@ namespace ECTunes {
 			g_gyro_last = gyroValue;
 
 
-			double acceleration = 0.0;
+			g_acceleration = 0.0;
 
-            acceleration = v_acc_projection.Length() - Math.Abs(g_angle);
+            g_acceleration = v_acc_projection.Length() - Math.Abs(g_angle);
             //acceleration = v_acc_projection.Length();
 			//acceleration = v_acc.Length() - g_v_acc_zero.Length();
 			//acceleration = g_accLength;
 			//}
             //acceleration = accLength - v_test_length;
-            if (g_readings % 2 != 0) { return; }
-			if (acceleration > G_ACCELERATION_THRESHOLD)
-				CalculateAcceleration(accAngle, acceleration, dt);
+            if (g_readings % 3 != 0) { return; }
+			if (g_acceleration > G_ACCELERATION_THRESHOLD)
+                CalculateAcceleration(accAngle, g_acceleration, dt, IsStationary(v_acc, GetAverage(), 30));
 
 			if (chkAccX.Checked) AddNewPoint("acc_x", g_readingIndex, v_acc.x);
 			if (chkAccY.Checked) AddNewPoint("acc_y", g_readingIndex, v_acc.y);
@@ -546,12 +561,13 @@ namespace ECTunes {
             if (chkGyY.Checked) AddNewPoint("gy_y", g_readingIndex, v_gy.y);
             //if (chkGyY.Checked) AddNewPoint("gy_y", g_readingIndex, accAngle1);
             //if (chkGyZ.Checked) AddNewPoint("gy_z", g_readingIndex, v_gy.z);
-            if (chkGyZ.Checked) AddNewPoint("gy_z", g_readingIndex, accAngle);
+            if (chkGyZ.Checked) AddNewPoint("gy_z", g_readingIndex, GetAverageNoise() * 10);
 
-			if (chkRacc.Checked) AddNewPoint("Racc", g_readingIndex, acceleration);
+			if (chkRacc.Checked) AddNewPoint("Racc", g_readingIndex, g_acceleration);
 			if (chkRgy.Checked) AddNewPoint("GAng", g_readingIndex, g_angle);
-			if (chkRtot.Checked) AddNewPoint("AccLen", g_readingIndex, g_accLength);
-			if (chkVelocity.Checked) AddNewPoint("Velocity", g_readingIndex, Math.Abs(g_velocity));
+            if (chkRtot.Checked) AddNewPoint("AccLen", g_readingIndex, g_accLength);
+            //if (chkVelocity.Checked) AddNewPoint("Velocity", g_readingIndex, g_velocity > 0 ? g_velocity : 0);
+            if (chkVelocity.Checked) AddNewPoint("Velocity", g_readingIndex, g_velocity);
 		}
 
 		private double AccelerationTest(Vector3D v_acc, Vector3D v_gy, double dt) {
@@ -641,13 +657,15 @@ namespace ECTunes {
 		//    if (chkVelocity.Checked) AddNewPoint("Velocity", g_readingIndex, Math.Abs(g_velocity));
 		//}
 
-		private void CalculateAcceleration(double accAngle, double acceleration, double deltaTime) {
-            if (Math.Abs(g_velocity) < 50) {
+		private void CalculateAcceleration(double accAngle, double acceleration, double deltaTime, bool stationary) {
+            if ((Math.Abs(g_velocity) < 50 && stationary) || g_velocity < -g_lower_velocity_detector) {
                 if (accAngle <= 90)
                     g_fwd = true;
                 else
                     g_fwd = false;
             }
+            if (g_velocity < -g_lower_velocity_detector)
+                g_velocity = g_lower_velocity_detector;
             if (g_fwd) {
 				if (accAngle < 90)
 					g_velocity += acceleration * deltaTime * G_ACC_OFFSET_ACCELERATE;
@@ -660,8 +678,6 @@ namespace ECTunes {
                 else
                     g_velocity -= acceleration * deltaTime * G_ACC_OFFSET_ACCELERATE;
             }
-            if (g_velocity < 0)
-                g_velocity = 51;
 		}
 
 		private double CalcAngle(double value) {
@@ -695,7 +711,7 @@ namespace ECTunes {
 				case "gy_z": lblGyZ.Text = y.ToString(); break;
 				case "Racc": lblForceR.Text = y.ToString(); break;
 				case "GAng": lblForceRg.Text = y.ToString();
-					//y = g_fwd ? 10000 : -10000;
+                    //y = g_fwd ? 1000 : -1000;
 					break;
 				case "AccLen": lblForceRt.Text = y.ToString(); break;
 				case "Velocity": lblVelocity.Text = y.ToString(); break;
@@ -749,9 +765,9 @@ namespace ECTunes {
                     if (g_readyToRun) {
                         g_readingIndex++;
                         //Floating calibration
-                        if (g_readings > g_num_of_recent_readings && IsStationary(acc, GetAverage(), G_NOISE_CALIBRATION_THRESHOLD)) {
+                        if (g_readings > g_num_of_recent_readings && IsStationary(acc, GetAverage(), G_NOISE_CALIBRATION_THRESHOLD) && g_acceleration < 300) {
                             g_velocity = 0;
-                            g_angle = g_accLength * 0.01;
+                            g_angle = g_accLength * 0.99;
                         }
 
                         g_LastDT = DateTime.Now;
@@ -771,6 +787,9 @@ namespace ECTunes {
                     else
                         g_readingIndex = 0;
 					g_recent.Enqueue(acc);
+                    double acc_len = acc.Length();
+                    g_noise.Enqueue(Math.Abs(acc_len - g_prev_acc_length));
+                    g_prev_acc_length = acc_len;
 				}
 
 			}
@@ -785,6 +804,13 @@ namespace ECTunes {
 			return temp / g_num_of_recent_readings;
 		}
 
+        private double GetAverageNoise() {
+            double temp = 0;
+            for (int i = 0; i < g_noise.Size(); i++) {
+                temp += g_noise.Get(i);
+            }
+            return temp / g_num_of_recent_readings;
+        }
 
 		public void PlaySound() {
 			while (g_running) {
@@ -839,7 +865,7 @@ namespace ECTunes {
 		private void btnReset_Click(object sender, EventArgs e) {
 			//running = false;
 			InitChart();
-			InitCalibration();
+            InitCalibration();
 			this.Invoke(new EventHandler(ResetEH));
 			//if (serialPort.IsOpen)
 			//    try {
@@ -938,6 +964,7 @@ namespace ECTunes {
 					// wait cursor while the nodes populate
 					//this.Cursor = Cursors.WaitCursor;
 					sr = new System.IO.StreamReader(fileStream);
+                    this.Text = openFileDialog1.FileName;
 					//this.Cursor = Cursors.Default;
 				}
 				catch (Exception ex) {
