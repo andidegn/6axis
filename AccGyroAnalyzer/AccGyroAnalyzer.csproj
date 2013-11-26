@@ -87,6 +87,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="sound\car_door_beep.pk" />
+    <None Include="sound\swamp_buggy_engine_start_and_idle.pk" />
+    <None Include="sound\van_reversing_tone_short_iveco.pk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -94,6 +97,15 @@
   <ItemGroup>
     <Folder Include="controller\" />
     <Folder Include="model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sound\car_door_beep.mp3" />
+    <Content Include="sound\car_door_beep.wav" />
+    <Content Include="sound\fwd.wav" />
+    <Content Include="sound\rev.wav" />
+    <Content Include="sound\swamp_buggy_engine_start_and_idle.wav" />
+    <Content Include="sound\van_reversing_tone_short_iveco.mp3" />
+    <Content Include="sound\van_reversing_tone_short_iveco.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
