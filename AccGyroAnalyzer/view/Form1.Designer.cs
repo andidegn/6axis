@@ -28,9 +28,9 @@ namespace ECTunes {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btnReset = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
@@ -38,7 +38,6 @@ namespace ECTunes {
             this.lblDirection = new System.Windows.Forms.Label();
             this.lblVelocity = new System.Windows.Forms.Label();
             this.chkVelocity = new System.Windows.Forms.CheckBox();
-            this.btnResetScale = new System.Windows.Forms.Button();
             this.chkGyroFwdCalibrated = new System.Windows.Forms.CheckBox();
             this.gbGy = new System.Windows.Forms.GroupBox();
             this.tbxGyRMeasure = new System.Windows.Forms.TextBox();
@@ -96,6 +95,10 @@ namespace ECTunes {
             this.tbxAccelerationThreshold = new System.Windows.Forms.TextBox();
             this.lblNoiseThreshold = new System.Windows.Forms.Label();
             this.lblAccelerationThreshold = new System.Windows.Forms.Label();
+            this.chk_tsmTools_RealTime = new System.Windows.Forms.ToolStripMenuItem();
+            this.chk_tsmTools_mute = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblEndpointAjustment = new System.Windows.Forms.Label();
+            this.tbxEndpointAjustment = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.pnlChart.SuspendLayout();
             this.gbGy.SuspendLayout();
@@ -108,23 +111,23 @@ namespace ECTunes {
             // 
             this.chart1.BorderlineColor = System.Drawing.Color.Black;
             this.chart1.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(29, 15);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(944, 461);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(149, 46);
+            this.btnReset.Location = new System.Drawing.Point(120, 46);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 2;
@@ -148,7 +151,6 @@ namespace ECTunes {
             this.pnlChart.Controls.Add(this.lblDirection);
             this.pnlChart.Controls.Add(this.lblVelocity);
             this.pnlChart.Controls.Add(this.chkVelocity);
-            this.pnlChart.Controls.Add(this.btnResetScale);
             this.pnlChart.Controls.Add(this.chkGyroFwdCalibrated);
             this.pnlChart.Controls.Add(this.gbGy);
             this.pnlChart.Controls.Add(this.chkAccFwdCalibrated);
@@ -209,16 +211,6 @@ namespace ECTunes {
             this.chkVelocity.TabIndex = 26;
             this.chkVelocity.Text = "Velocity";
             this.chkVelocity.UseVisualStyleBackColor = true;
-            // 
-            // btnResetScale
-            // 
-            this.btnResetScale.Location = new System.Drawing.Point(869, 483);
-            this.btnResetScale.Name = "btnResetScale";
-            this.btnResetScale.Size = new System.Drawing.Size(75, 23);
-            this.btnResetScale.TabIndex = 24;
-            this.btnResetScale.Text = "Reset Scale";
-            this.btnResetScale.UseVisualStyleBackColor = true;
-            this.btnResetScale.Click += new System.EventHandler(this.btnResetScale_Click);
             // 
             // chkGyroFwdCalibrated
             // 
@@ -591,7 +583,7 @@ namespace ECTunes {
             this.tkbScale.Name = "tkbScale";
             this.tkbScale.Size = new System.Drawing.Size(716, 45);
             this.tkbScale.TabIndex = 7;
-            this.tkbScale.Value = 25;
+            this.tkbScale.Value = 400;
             this.tkbScale.Scroll += new System.EventHandler(this.tkbScale_Scroll);
             // 
             // chkFullScale
@@ -607,7 +599,7 @@ namespace ECTunes {
             // 
             // btnDataChart
             // 
-            this.btnDataChart.Location = new System.Drawing.Point(559, 46);
+            this.btnDataChart.Location = new System.Drawing.Point(530, 46);
             this.btnDataChart.Name = "btnDataChart";
             this.btnDataChart.Size = new System.Drawing.Size(75, 23);
             this.btnDataChart.TabIndex = 4;
@@ -628,7 +620,7 @@ namespace ECTunes {
             // 
             // btnStartPause
             // 
-            this.btnStartPause.Location = new System.Drawing.Point(68, 46);
+            this.btnStartPause.Location = new System.Drawing.Point(39, 46);
             this.btnStartPause.Name = "btnStartPause";
             this.btnStartPause.Size = new System.Drawing.Size(75, 23);
             this.btnStartPause.TabIndex = 1;
@@ -638,7 +630,7 @@ namespace ECTunes {
             // 
             // btnCalibrate
             // 
-            this.btnCalibrate.Location = new System.Drawing.Point(230, 46);
+            this.btnCalibrate.Location = new System.Drawing.Point(201, 46);
             this.btnCalibrate.Name = "btnCalibrate";
             this.btnCalibrate.Size = new System.Drawing.Size(75, 23);
             this.btnCalibrate.TabIndex = 13;
@@ -669,21 +661,23 @@ namespace ECTunes {
             // tsmFile_open
             // 
             this.tsmFile_open.Name = "tsmFile_open";
-            this.tsmFile_open.Size = new System.Drawing.Size(103, 22);
+            this.tsmFile_open.Size = new System.Drawing.Size(152, 22);
             this.tsmFile_open.Text = "Open";
             this.tsmFile_open.Click += new System.EventHandler(this.tsmFile_open_Click);
             // 
             // printToolStripMenuItem
             // 
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
             // 
             // tsmTools
             // 
             this.tsmTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.chk_tsmTools_CalibrateSignal});
+            this.chk_tsmTools_CalibrateSignal,
+            this.chk_tsmTools_RealTime,
+            this.chk_tsmTools_mute});
             this.tsmTools.Name = "tsmTools";
             this.tsmTools.Size = new System.Drawing.Size(48, 20);
             this.tsmTools.Text = "Tools";
@@ -692,20 +686,20 @@ namespace ECTunes {
             // 
             this.chk_tsmTools_CalibrateSignal.CheckOnClick = true;
             this.chk_tsmTools_CalibrateSignal.Name = "chk_tsmTools_CalibrateSignal";
-            this.chk_tsmTools_CalibrateSignal.Size = new System.Drawing.Size(156, 22);
+            this.chk_tsmTools_CalibrateSignal.Size = new System.Drawing.Size(184, 22);
             this.chk_tsmTools_CalibrateSignal.Text = "Calibrate Signal";
             // 
             // cbbComPort
             // 
             this.cbbComPort.FormattingEnabled = true;
-            this.cbbComPort.Location = new System.Drawing.Point(338, 46);
+            this.cbbComPort.Location = new System.Drawing.Point(309, 46);
             this.cbbComPort.Name = "cbbComPort";
             this.cbbComPort.Size = new System.Drawing.Size(121, 21);
             this.cbbComPort.TabIndex = 15;
             // 
             // btnRefreshComPort
             // 
-            this.btnRefreshComPort.Location = new System.Drawing.Point(466, 46);
+            this.btnRefreshComPort.Location = new System.Drawing.Point(437, 46);
             this.btnRefreshComPort.Name = "btnRefreshComPort";
             this.btnRefreshComPort.Size = new System.Drawing.Size(75, 23);
             this.btnRefreshComPort.TabIndex = 16;
@@ -715,22 +709,22 @@ namespace ECTunes {
             // 
             // tbxNoiseThreshold
             // 
-            this.tbxNoiseThreshold.Location = new System.Drawing.Point(749, 48);
+            this.tbxNoiseThreshold.Location = new System.Drawing.Point(717, 48);
             this.tbxNoiseThreshold.Name = "tbxNoiseThreshold";
-            this.tbxNoiseThreshold.Size = new System.Drawing.Size(100, 20);
+            this.tbxNoiseThreshold.Size = new System.Drawing.Size(62, 20);
             this.tbxNoiseThreshold.TabIndex = 17;
             // 
             // tbxAccelerationThreshold
             // 
-            this.tbxAccelerationThreshold.Location = new System.Drawing.Point(989, 49);
+            this.tbxAccelerationThreshold.Location = new System.Drawing.Point(910, 49);
             this.tbxAccelerationThreshold.Name = "tbxAccelerationThreshold";
-            this.tbxAccelerationThreshold.Size = new System.Drawing.Size(100, 20);
+            this.tbxAccelerationThreshold.Size = new System.Drawing.Size(62, 20);
             this.tbxAccelerationThreshold.TabIndex = 18;
             // 
             // lblNoiseThreshold
             // 
             this.lblNoiseThreshold.AutoSize = true;
-            this.lblNoiseThreshold.Location = new System.Drawing.Point(664, 51);
+            this.lblNoiseThreshold.Location = new System.Drawing.Point(632, 51);
             this.lblNoiseThreshold.Name = "lblNoiseThreshold";
             this.lblNoiseThreshold.Size = new System.Drawing.Size(84, 13);
             this.lblNoiseThreshold.TabIndex = 19;
@@ -739,17 +733,49 @@ namespace ECTunes {
             // lblAccelerationThreshold
             // 
             this.lblAccelerationThreshold.AutoSize = true;
-            this.lblAccelerationThreshold.Location = new System.Drawing.Point(867, 52);
+            this.lblAccelerationThreshold.Location = new System.Drawing.Point(788, 52);
             this.lblAccelerationThreshold.Name = "lblAccelerationThreshold";
             this.lblAccelerationThreshold.Size = new System.Drawing.Size(116, 13);
             this.lblAccelerationThreshold.TabIndex = 20;
             this.lblAccelerationThreshold.Text = "Acceleration Threshold";
+            // 
+            // chk_tsmTools_RealTime
+            // 
+            this.chk_tsmTools_RealTime.CheckOnClick = true;
+            this.chk_tsmTools_RealTime.Name = "chk_tsmTools_RealTime";
+            this.chk_tsmTools_RealTime.Size = new System.Drawing.Size(184, 22);
+            this.chk_tsmTools_RealTime.Text = "Real Time (CSV only)";
+            // 
+            // chk_tsmTools_mute
+            // 
+            this.chk_tsmTools_mute.CheckOnClick = true;
+            this.chk_tsmTools_mute.Name = "chk_tsmTools_mute";
+            this.chk_tsmTools_mute.Size = new System.Drawing.Size(184, 22);
+            this.chk_tsmTools_mute.Text = "Mute";
+            // 
+            // lblEndpointAjustment
+            // 
+            this.lblEndpointAjustment.AutoSize = true;
+            this.lblEndpointAjustment.Location = new System.Drawing.Point(982, 52);
+            this.lblEndpointAjustment.Name = "lblEndpointAjustment";
+            this.lblEndpointAjustment.Size = new System.Drawing.Size(98, 13);
+            this.lblEndpointAjustment.TabIndex = 22;
+            this.lblEndpointAjustment.Text = "Endpoint Ajustment";
+            // 
+            // tbxEndpointAjustment
+            // 
+            this.tbxEndpointAjustment.Location = new System.Drawing.Point(1086, 49);
+            this.tbxEndpointAjustment.Name = "tbxEndpointAjustment";
+            this.tbxEndpointAjustment.Size = new System.Drawing.Size(62, 20);
+            this.tbxEndpointAjustment.TabIndex = 21;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1265, 629);
+            this.Controls.Add(this.lblEndpointAjustment);
+            this.Controls.Add(this.tbxEndpointAjustment);
             this.Controls.Add(this.lblAccelerationThreshold);
             this.Controls.Add(this.lblNoiseThreshold);
             this.Controls.Add(this.tbxAccelerationThreshold);
@@ -846,10 +872,13 @@ namespace ECTunes {
         private CheckBox chkAccFwdCalibrated;
         private CheckBox chkZeroCalibrated;
         private ToolStripMenuItem printToolStripMenuItem;
-        private Button btnResetScale;
         private Label lblVelocity;
         private CheckBox chkVelocity;
         private Label lblDirection;
+        private ToolStripMenuItem chk_tsmTools_RealTime;
+        private ToolStripMenuItem chk_tsmTools_mute;
+        private Label lblEndpointAjustment;
+        private TextBox tbxEndpointAjustment;
     }
 }
 
